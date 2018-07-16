@@ -10,8 +10,6 @@ from leonardo.module.media.models.filemodels import File
 
 
 class Project(models.Model, TranslatedObjectMixin):
-    category = models.ForeignKey(
-        ProductCategory, related_name="projects", verbose_name=_("Project Category"), blank=True, null=True)
     ordering = models.PositiveIntegerField(
         verbose_name=_("Ordering"), default=0)
 

@@ -36,7 +36,7 @@ ProjectImageTranslation_Inline = admin_translationinline(
 
 
 class ProjectImageInline(admin.TabularInline):
-    model = ProductImage
+    model = ProjectImage
 
 
 class ImageCategoryInline(admin.TabularInline):
@@ -56,12 +56,12 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class ProjectImageAdmin(admin.ModelAdmin):
     inlines = [ProjectImageTranslation_Inline]
-    list_display = ["__unicode__", "product", "featured"]
+    list_display = ["__unicode__", "project", "featured"]
 
 
 class ImageCategoryAdmin(admin.ModelAdmin):
-    inlines = [ProductCategoryImageTranslation_Inline]
-    list_display = ["__unicode__", "category", "featured"]
+    inlines = [ImageCategoryInline]
+    list_display = ["__unicode__", "categories", "featured"]
 
 
 admin.site.register(Project, ProjectAdmin)

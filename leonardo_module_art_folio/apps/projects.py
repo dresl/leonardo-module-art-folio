@@ -12,4 +12,4 @@ def artfolio_patterns(list_kwargs={}, detail_kwargs={}):
     ]
 
 
-urlpatterns = productcatalog_patterns()
+urlpatterns = artfolio_patterns()

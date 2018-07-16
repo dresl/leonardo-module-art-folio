@@ -18,7 +18,7 @@ class Default(object):
     @property
     def widgets(self):
         return [
-            'leonardo_module_art_folio.widget.productcatalog.models.ArtFolioWidget',
+            'leonardo_module_art_folio.widget.artfolio.models.ArtFolioWidget',
         ]
 
     @property
