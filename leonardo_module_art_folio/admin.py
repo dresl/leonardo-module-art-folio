@@ -22,9 +22,7 @@ ProjectTranslation_Inline = admin_translationinline(
 
 ImageCategoryTranslation_Inline = admin_translationinline(
     ImageCategoryTranslation,
-    prepopulated_fields={
-        'slug': ('name',)
-    }, formfield_overrides={
+    formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
 
@@ -32,7 +30,6 @@ ProjectImageTranslation_Inline = admin_translationinline(
     ProjectImageTranslation, formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
-
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -48,7 +45,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ['translations__name']
     search_fields = ['translations__name']
     list_per_page = 50
-    inlines = [ProjectTranslation_Inline, ProjectImageTranslation_Inline]
+    inlines = [ProjectTranslation_Inline, ProjectImageInline]
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -56,12 +53,12 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class ProjectImageAdmin(admin.ModelAdmin):
     inlines = [ProjectImageTranslation_Inline]
-    list_display = ["__unicode__", "project", "featured"]
+    list_display = ["__unicode__", "ordering", "featured"]
 
 
 class ImageCategoryAdmin(admin.ModelAdmin):
-    inlines = [ImageCategoryInline]
-    list_display = ["__unicode__", "categories", "featured"]
+    inlines = [ImageCategoryTranslation_Inline]
+    list_display = ["__unicode__", "ordering"]
 
 
 admin.site.register(Project, ProjectAdmin)

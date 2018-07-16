@@ -108,8 +108,8 @@ class ImageCategory(models.Model, TranslatedObjectMixin):
 
     class Meta:
         ordering = ["ordering"]
-        verbose_name = _("Project category")
-        verbose_name_plural = _("Project categories")
+        verbose_name = _("Project image category")
+        verbose_name_plural = _("Project image categories")
 
 
 class ImageCategoryTranslation(Translation(ImageCategory)):
@@ -119,7 +119,7 @@ class ImageCategoryTranslation(Translation(ImageCategory)):
     """
 
     name = models.CharField(
-        verbose_name=_("Name"), default='')
+        verbose_name=_("Name"), max_length=255, default='')
 
     class Meta:
         verbose_name = _("Translation")
@@ -135,7 +135,7 @@ class ProjectImage(models.Model, TranslatedObjectMixin):
     image = models.ImageField(
         verbose_name=_("Project Image"), upload_to="project_images/")
     categories = models.ManyToManyField(
-        ProjectImageCategory, verbose_name="Categories")
+        ImageCategory, verbose_name="Categories")
     ordering = models.PositiveIntegerField(
         verbose_name=_("Ordering"), default=0)
     featured = models.BooleanField(
@@ -176,11 +176,11 @@ class ProjectImageTranslation(Translation(ProjectImage)):
     """
 
     name = models.CharField(
-        verbose_name=_("Name"), default='')
+        verbose_name=_("Name"), max_length=255, default='')
     description = models.TextField(
-        verbose_name=_("Description"), default='')
+        verbose_name=_("Description"), max_length=255, default='')
     size = models.CharField(
-        verbose_name=_("Size"), default='')
+        verbose_name=_("Size"), max_length=255, default='')
 
     class Meta:
         verbose_name = _("Translation")
