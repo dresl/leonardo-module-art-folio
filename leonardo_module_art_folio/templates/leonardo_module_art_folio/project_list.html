@@ -1,56 +1,27 @@
 {% extends widget.get_base_template %}
 
-{% load i18n %}
+{% load i18n thumbnail %}
 
 {% block content %}
 <style>
 .project-list h3 {
   margin-bottom: 30px;
 }
-.project-list .project-download-link,
-.project-list .project-download-link:hover,
-.project-list .project-download-link:focus,
-.project-list .project-download-link:active {
-  color: #333;
-  text-decoration: none;
-  text-transform: uppercase;
-}
 </style>
 
-<div class="row">
-  <div class="col-sm-12">
-    <h1>{% trans "project downloads" %}</h1>
-  </div>
-</div>
-
 <div class="project-list">
+  <div class="container">
 {% for project in object_list %}
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>{{ project }}</h3>
+  <a href="{{ project.get_absolute_url }}">
+    <div class="col-sm-4">
+      <h3>{{ project.translation.name }}</h3>
+      {% thumbnail project.primary_image.image "300x300" as thumb%}
+      <img src="{{ thumb.url }}">
+      {% endthumbnail %}
     </div>
-    <div class="col-sm-12">
-  
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>{% trans "Name" %}</th>
-              <th>{% trans "Description" %}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for file in project.files %}
-            <tr>
-              <td>{{ file.original_filename }}</td>
-              <td>{{ file.description }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
-  </div>
+  </a>
 {% endfor %}
+  </div>
 </div>
 
 {% endblock %}
-

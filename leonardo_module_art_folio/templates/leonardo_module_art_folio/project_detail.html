@@ -1,137 +1,294 @@
 {% extends widget.get_base_template %}
 
-{% load i18n staticfiles %}
+{% load i18n %}
+{% load leonardo_tags leonardo_page_tags thumbnail %}
 
 {% block content %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/css/lightbox.min.css" type="text/css" rel="stylesheet">
-<style>
-h1 {
-  padding: 0;
-}
-.project-detail {
-  margin-top: 40px;
-}
-.project-detail .project-image {
-  text-align: center;
-}
-.project-detail .project-image > img {
-  max-height: 300px;
-  display: inline-block;
-}
-.project-detail h2 {
-  margin-bottom: 40px;
-}
-.project-detail .project-download-link,
-.project-detail .project-download-link:hover,
-.project-detail .project-download-link:focus,
-.project-detail .project-download-link:active {
-  color: #333;
-  text-decoration: none;
-  margin-top: 24px;
-  margin-right: 20%;
+
+<style type="text/css">
+.project-image {
+    width: 70%;
+    margin-top: 10px;
 }
 
-.project-detail .project-download-link i {
-  padding-right: 25px;
+.nav-pills li a {
+    color: #333333;
 }
 
-.pdf-link:hover {
-  text-decoration: none;
+.nav-stacked.second-nav {
+    margin-left: 32px;
+    border-left: 1px solid #333333;
 }
-.pdf-wrapper {
-  padding: 40px 20px;
+
+.bold {
+    font-weight: bold;
 }
-.pdf-file:hover {
-  background-color: #f3f3f3;
+.object-text {
+    text-align: center;
 }
-img.custom-pdf-icon {
-  width: 66px;
-  margin-left: 15px;
-  padding: 15px;
+
+.object-text a {
+    color: #333333;
 }
-span.pdf-heading {
-  padding-left: 15px;
-  color: #000;
+
+/* info object */
+
+.info-object {
+    display: none;
+    opacity: 0;
+    transition: all 0.5s ease;
 }
-.full-row {
-  border-top: 1px solid #505050;
-  margin: 0;
+.info-object h2 {
+    text-transform: uppercase;
+    font-size: 17px;
+    font-weight: bold;
+    padding-top: 28px;
+    line-height: 20px;
 }
-.thumbnail-project-image {
-  display: block;
-  width: 19%;
-  margin: 1px;
-  border: 1px solid #dadada;
-  float: left;
-  height: 133px;
+.info-object span {
+    padding-bottom: 25px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
 }
-.thumbnail-project-image a {
-  display: block;
-  width: 100%;
-  height: 100%;
+.info-object p {
+    font-size: 14px;
+    padding-bottom: 20px;
 }
+.close {
+    float: left;
+    font-size: 20px;
+    margin-top: 14px;
+    font-weight: bold;
+    line-height: 0;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.7;
+    filter: alpha(opacity=20);
+}
+
+/* button slide open */
+.btn-open-panel .btn-title {
+    transition: all 0.5s ease;
+    right: 0px;
+}
+
+.more-info-opened .btn-open-panel .btn-title {
+    right: -42px!important;
+}
+
+.btn-open-panel .btn-title {
+    background-color: #fff;
+    font-weight: bold;
+    height: 42px;
+    width: auto;
+    right: 0;
+    padding: 11px 30px;
+    top: 41px;
+    transform: rotate(-90deg) translate(0, -100%);
+    transform-origin: 100% 0;
+    position: absolute;
+    text-align: center;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+/* categories */
+.categories {
+    position: fixed;
+    background-color: #fff;
+    width: 100%;
+    bottom: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 20;
+}
+.object-detail.categoreis-opened .categories {
+    height: 172px;
+}
+.categories .container {
+    padding: 37px 0px;
+    display: block;
+}
+.categories ul .category-item {
+    width: calc(100%/8);
+    float: left;
+    padding: 0px 3px;
+}
+.categories ul .category-item.active {
+    box-shadow: 0px 0px 17px 1px #ccc;
+}
+.categories ul .category-item img {
+    width: 100%;
+    border: 1px solid #bfbfbf;
+}
+.categories ul .category-item span {
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    padding-bottom: 2px;
+}
+
+.btn-categories {
+    position: fixed;
+    display: inline-block;
+    background-color: #fff;
+    margin-top: -36px;
+    padding: 10px 38px;
+    left: 100px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 13px;
+    width: auto;
+    white-space: nowrap;
+    cursor: pointer;
+    bottom: 0;
+    z-index: 20;
+    transition: all 0.5s ease;
+}
+.btn-categories .title {
+    display: inline-block;
+    padding-right: 10px;
+}
+.btn-categories .arrow {
+    border: 2px solid #333;
+    border-width: 0 2px 2px 0;
+    transform: rotate(225deg);
+    -webkit-transform: rotate(225deg);
+    margin-left: 5px;
+    padding: 6px;
+    height: 12px;
+    margin-top: 6px;
+    display: inline-block;
+    position: absolute;
+    transition: all 0.5s ease;
+}
+.object-detail.categoreis-opened .btn-categories {
+    bottom: 172px;
+}
+.object-detail.categoreis-opened .btn-categories .arrow {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin-top: -2px;
+}
+
+
 </style>
 
-<div class="project-detail">
-  {# primary image and description #}
-  <div class="row">
-<!--     <div class="col-sm-12">
-      <div class="project-image">
-        <img class="img-responsive" src="{{ project.primary_image.image.url }}">
-      </div>
-    </div> -->
-    <div class="col-sm-12">
-      <p>{{ project.translation.description|safe }}</p>
-    </div>
-  </div>
-  {# Image gallery #}
-  {% if project.images.count > 1 %}
-  <div class="row gallery-wrapper">
-    <div class="col-sm-12">
-      <hr>
-      {% for image in project.images.all %}
-      {% if not image.featured %}
-      <style type="text/css">
-        .thumb-addbg-{{ forloop.counter }} { 
-          background: url({{ image.image.url }}) 50% 50% no-repeat; /* 50% 50% centers image in div */
-          background-size: cover;
-        }
-      </style>
-      <div class="thumb-addbg-{{ forloop.counter }} thumbnail-project-image">
-        <a href="{{ image.image.url }}" data-lightbox="project_gallery"></a>
-      </div>
-      {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
-  {# Video gallery #}
-  {% if project.videos.count > 0 %}
-  <div class="row">
-<!--     <div class="col-sm-12">
-      <h2>{% trans "Video gallery" %}</h2>
-    </div> -->
-    {% for video in project.videos.all %}
-    <div class="col-xs-12">
-        {% if video.video %}
-        <video width="100%" height="240" controls>
-          <source src="{{ video.video.url }}">
-          {% trans "Your browser does not support the video tag." %}
-        </video>
-        {% elif video.video_link %}
-        <iframe width="100%" height="460" src="{{ video.video_link }}" frameborder="0" allowfullscreen></iframe>
-        {% endif %}
-        <div class="caption">
-          <p>{{ video.translation.caption }}</p>
+<div class="object-detail more-info-opened categoreis-opened" slick-active-id="">
+    <div class="row">
+        <!-- <h1>{{ object.translation.title }}</h1> -->
+        <div class="col-xs-12 padding-none main-images-preview">
+
+            {% for picture in object.images.all %}
+            <div class="object-image" slick-info-id="info-slick-{{ picture.id }}">
+                {% thumbnail picture.image "1920x1080" format="PNG" as image %}
+                <img class="project-image" data-lazy="{{ image.url }}" />
+                {% endthumbnail %}
+                <script type="text/javascript">
+                $(function(){
+                    $("<div class='info-object info-slick' slick-info-id='info-slick-{{ picture.id }}'>\
+                    <h2>{{ picture.translation.name }}</h2>\
+                    <span>{{ picture.translation.size }}</span>\
+                    {{ picture.translation.description|escapejs|safe }}\
+                    <p>{% for tag in picture.categories.all %}{{ tag.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>\
+                    </div>").appendTo($(".panel-more-info"));
+                    $("<span class='btn-title' slick-info-id='info-slick-{{ picture.id }}'>{{ picture.translation.name }}</span>").appendTo($(".btn-open-panel"));
+                });
+                </script>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="btn-categories">
+            <span class="title">Kategorie</span>
+            <span class="arrow"></span>
+        </div>
+        <div class="categories">
+            <div class="container">
+                <ul class="categories-menu">
+                {% for project in projects %}
+                    <a href="{% app_reverse 'art_detail_project' 'leonardo_module_art_folio.apps.projects' slug=project.translation.slug %}">
+                        <li class="category-item {% if project.translation.slug in request.path %}active{% endif %}">
+                            <span>{{ project.translation.name }}</span>
+                            {% thumbnail project.primary_image.image "x200" as projectThumb %}
+                            <img src="{{ projectThumb.url }}">
+                            {% endthumbnail %}
+                        </li>
+                    </a>
+                {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+    <div class="btn-open-panel more-info">
+        <span class="open"></span>
+    </div>
+    <div class="panel-more-info">
+        <span class="close">X</span>
+    </div>
+    <div class="category"></div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $(".main-images-preview").slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots: false,
+        lazyLoad: 'ondemand',
+    });
+    
+    // toggle class on btn more info
+    $(".btn-open-panel").click(function(){
+        $(".object-detail").toggleClass("more-info-opened");
+    });
+    $(".panel-more-info .close").click(function(){
+        $(".object-detail").toggleClass("more-info-opened");
+    });
+    $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
 
-<script>
-loadResource('https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/js/lightbox.min.js');
+    // toggle class on catgories
+    $(".btn-categories").click(function(){
+        $(".object-detail").toggleClass("categoreis-opened");
+    });
+
+    // left info panel functions
+    function compareInfoContentSlickActive(element) {
+        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+            $(element).animate({opacity:1},300).show();
+        } else {
+            $(element).animate({opacity:0},300).hide();
+        }
+    }
+    function compareBtnOpenInfoSlickActive(element) {
+        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+            $(element).css("right", "0px");
+        } else {
+            $(element).css("right", "-42px");
+        }
+    }
+
+    // info inner content and btn onload
+    $(".info-object.info-slick").map(function(){
+        compareInfoContentSlickActive($(this));
+    });
+    $(".btn-open-panel .btn-title").map(function(){
+        compareBtnOpenInfoSlickActive($(this));
+    });
+
+    // info inner content and btn afterChange
+    $('.main-images-preview').on('afterChange', function(event, slick, direction){
+        $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+        $(".info-object.info-slick").map(function(){
+            compareInfoContentSlickActive($(this));
+        });
+        $(".btn-open-panel .btn-title").map(function(){
+            compareBtnOpenInfoSlickActive($(this));
+        });
+    });
+});
 </script>
-
 {% endblock %}
-

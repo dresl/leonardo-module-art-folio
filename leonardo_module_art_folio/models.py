@@ -50,10 +50,9 @@ class Project(models.Model, TranslatedObjectMixin):
     def get_absolute_url(self):
         from leonardo.module.web.widget.application.reverse import app_reverse
         return app_reverse(
-            'detail_project',
+            'art_detail_project',
             'leonardo_module_art_folio.apps.projects',
             kwargs={
-                'category_slug': self.category.translation.slug,
                 'slug': self.translation.slug})
 
     class Meta:
@@ -71,7 +70,7 @@ class ProjectTranslation(Translation(Project)):
     name = models.CharField(
         max_length=255, verbose_name=_("Name"), default='')
     slug = models.SlugField(_("Slug"), unique=True)
-    description = models.TextField(verbose_name=_("Description"), default='')
+    description = models.TextField(verbose_name=_("Description"), blank=True, null=True, default='')
 
     class Meta:
         verbose_name = _("Translation")
@@ -135,7 +134,7 @@ class ProjectImage(models.Model, TranslatedObjectMixin):
     image = models.ImageField(
         verbose_name=_("Project Image"), upload_to="project_images/")
     categories = models.ManyToManyField(
-        ImageCategory, verbose_name="Categories")
+        ImageCategory, verbose_name="Categories", blank=True, null=True)
     ordering = models.PositiveIntegerField(
         verbose_name=_("Ordering"), default=0)
     featured = models.BooleanField(
@@ -178,9 +177,9 @@ class ProjectImageTranslation(Translation(ProjectImage)):
     name = models.CharField(
         verbose_name=_("Name"), max_length=255, default='')
     description = models.TextField(
-        verbose_name=_("Description"), max_length=255, default='')
+        verbose_name=_("Description"), blank=True, null=True, default='')
     size = models.CharField(
-        verbose_name=_("Size"), max_length=255, default='')
+        verbose_name=_("Size"), blank=True, null=True, max_length=255, default='')
 
     class Meta:
         verbose_name = _("Translation")

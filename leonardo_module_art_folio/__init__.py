@@ -24,7 +24,20 @@ class Default(object):
     @property
     def plugins(self):
         return [
-            ('leonardo_module_art_folio.apps.projects', 'List of projects'),
+            ('leonardo_module_art_folio.apps.projects', 'Art folio projects'),
+        ]
+
+    @property
+    def css_files(self):
+        return [
+            'css/slick.css',
+            'css/slick-theme.css',
+        ]
+    
+    @property
+    def js_files(self):
+        return [
+            'js/slick.min.js'
         ]
 
     public = True

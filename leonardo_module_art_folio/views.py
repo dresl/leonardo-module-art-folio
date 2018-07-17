@@ -28,3 +28,8 @@ class ProjectListView(ListView):
 class ProjectDetailView(DetailView):
     model = Project
     slug_field = 'translations__slug'
+
+    def get_context_data(self, **kwargs):
+      context = super(ProjectDetailView, self).get_context_data(**kwargs)
+      context['projects'] = Project.objects.all()
+      return context
