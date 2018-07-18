@@ -3,10 +3,20 @@ from django.contrib import admin
 from django.db import models
 from .models import (Project,
                      ProjectTranslation,
+                     ProjectImage,
+                     ProjectImageTranslation,
                      ImageCategory,
                      ImageCategoryTranslation,
-                     ProjectImage,
-                     ProjectImageTranslation,)
+                     ImageTheme,
+                     ImageThemeTranslation,
+                     ImageColors,
+                     ImageColorsTranslation,
+                     ImageFormat,
+                     ImageFormatTranslation,
+                     ImageTechnique,
+                     ImageTechniqueTranslation,
+                     ProjectImageOrder
+                    )
 
 from feincms.translations import admin_translationinline
 from ckeditor.widgets import CKEditorWidget
@@ -24,14 +34,38 @@ ProjectTranslation_Inline = admin_translationinline(
         models.TextField: {'widget': CKEditorWidget}
     })
 
+ProjectImageTranslation_Inline = admin_translationinline(
+    ProjectImageTranslation, formfield_overrides={
+        models.TextField: {'widget': CKEditorWidget}
+    })
+
 ImageCategoryTranslation_Inline = admin_translationinline(
     ImageCategoryTranslation,
     formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
 
-ProjectImageTranslation_Inline = admin_translationinline(
-    ProjectImageTranslation, formfield_overrides={
+ImageThemeTranslation_Inline = admin_translationinline(
+    ImageThemeTranslation,
+    formfield_overrides={
+        models.TextField: {'widget': CKEditorWidget}
+    })
+
+ImageColorsTranslation_Inline = admin_translationinline(
+    ImageColorsTranslation,
+    formfield_overrides={
+        models.TextField: {'widget': CKEditorWidget}
+    })
+
+ImageFormatTranslation_Inline = admin_translationinline(
+    ImageFormatTranslation,
+    formfield_overrides={
+        models.TextField: {'widget': CKEditorWidget}
+    })
+
+ImageTechniqueTranslation_Inline = admin_translationinline(
+    ImageTechniqueTranslation,
+    formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
 
@@ -58,7 +92,9 @@ thumb_large.allow_tags = True
 class ProjectImageInline(admin.StackedInline):
     model = ProjectImage
     extra = 0
-    fields = ["get_edit_link", "image", "categories", "ordering", "featured", thumb]
+    fields = ["get_edit_link", "image", "categories",
+              "theme", "image_format", "colors",
+              "technique", "status", "ordering", "featured", thumb]
     readonly_fields = ["get_edit_link", thumb]
 
     def get_edit_link(self, obj=None):
@@ -71,11 +107,6 @@ class ProjectImageInline(admin.StackedInline):
         return _("(save and continue editing to create a link)")
     get_edit_link.short_description = _("Edit link")
     get_edit_link.allow_tags = True
-
-
-class ImageCategoryInline(admin.StackedInline):
-    model = ImageCategory
-    extra = 1
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -91,11 +122,13 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class ProjectImageAdmin(admin.ModelAdmin):
     inlines = [ProjectImageTranslation_Inline]
-    list_display = ["__unicode__", thumb, "ordering", "featured"]
-    list_editable = ["ordering", "featured"]
+    list_display = ["__unicode__", thumb, "status", "ordering", "featured"]
+    list_editable = ["status", "ordering", "featured"]
     list_filter = ["project", "categories"]
     search_fields = ['translations__name']
-    fields = ["image", "categories", "ordering", "featured", thumb_large]
+    fields = ["image", "categories", "theme",
+              "image_format", "colors", "technique",
+               "status", "ordering", "featured", thumb_large]
     readonly_fields = [thumb_large]
 
 
@@ -103,7 +136,41 @@ class ImageCategoryAdmin(admin.ModelAdmin):
     inlines = [ImageCategoryTranslation_Inline]
     list_display = ["__unicode__", "ordering"]
 
+class ImageThemeAdmin(admin.ModelAdmin):
+    inlines = [ImageThemeTranslation_Inline]
+    list_display = ["__unicode__", "ordering"]
+
+class ImageColorsAdmin(admin.ModelAdmin):
+    inlines = [ImageColorsTranslation_Inline]
+    list_display = ["__unicode__", "ordering"]
+
+class ImageFormatAdmin(admin.ModelAdmin):
+    inlines = [ImageFormatTranslation_Inline]
+    list_display = ["__unicode__", "ordering"]
+
+class ImageTechniqueAdmin(admin.ModelAdmin):
+    inlines = [ImageTechniqueTranslation_Inline]
+    list_display = ["__unicode__", "ordering"]
+
+
+class ProjectImageOrderAdmin(admin.ModelAdmin):
+    model = ProjectImageOrder
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            return ['pub_date']
+        else:
+            return ['pub_date']
+        return []
+    list_display = ('picture', 'name', 'telephone', 'email', 'note', 'pub_date')
+    list_filter = ['pub_date','name']
+    search_fields = ['name']
+
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectImage, ProjectImageAdmin)
 admin.site.register(ImageCategory, ImageCategoryAdmin)
+admin.site.register(ImageTheme, ImageThemeAdmin)
+admin.site.register(ImageColors, ImageColorsAdmin)
+admin.site.register(ImageFormat, ImageFormatAdmin)
+admin.site.register(ImageTechnique, ImageTechniqueAdmin)
+admin.site.register(ProjectImageOrder, ProjectImageOrderAdmin)

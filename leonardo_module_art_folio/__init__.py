@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
@@ -39,6 +39,13 @@ class Default(object):
         return [
             'js/slick.min.js'
         ]
+
+    config = {
+        'ORDER_DEFAULT_TO_EMAIL':
+        ('to@email.com', u"E-mail, na který se budou odesílat objednávky."),
+    }
+
+    ordering = -3
 
     public = True
 

@@ -1,0 +1,52 @@
+{% extends widget.get_base_template %}
+
+{% load i18n crispy_forms_tags leonardo_tags leonardo_page_tags thumbnail %}
+{% block content %}
+<style>
+.search {
+  padding-top: 80px;
+}
+button.btn.btn-default {
+    height: 34px;
+}
+</style>
+<div class="container search">
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    {% include "leonardo_module_art_folio/search_form.html" %}
+  </div>
+</div>
+<ul>
+  {% for picture in picture_list %}
+  <li>
+    <a href="{{ picture.project.get_absolute_url }}#slick-slide-{{ picture.id }}">
+      <span>{{ picture.translation.name }}
+      <img width="150px" src="{{ picture.image.url }}">
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
+
+{% if is_paginated %}
+  <ul class="pagination">
+    {% if picture_list.has_previous %}
+      <li><a href="?q={{ request.GET.q }}&page={{ picture_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in picture_list.paginator.page_range %}
+      {% if picture_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?q={{ request.GET.q }}&page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if picture_list.has_next %}
+      <li><a href="?q={{ request.GET.q }}&page={{ picture_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+{% endblock %}

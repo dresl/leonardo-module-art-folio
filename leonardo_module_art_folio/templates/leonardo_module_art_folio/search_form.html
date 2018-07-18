@@ -1,0 +1,10 @@
+{% load i18n crispy_forms_tags leonardo_tags leonardo_page_tags thumbnail %}
+
+<form id="searchform" action="{% app_reverse 'art_search' 'leonardo_module_art_folio.apps.projects' %}" method="get" accept-charset="utf-8">
+  <div class="input-group">
+    <input class="form-control" name="q" type="text" placeholder="Hledaný výraz...">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="submit">Vyhledat</button>
+    </span>
+  </div>
+</form>

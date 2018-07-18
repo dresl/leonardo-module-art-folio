@@ -1,0 +1,46 @@
+{% extends "leonardo/common/_modal.html" %}
+
+{% load thumbnail leonardo_tags leonardo_page_tags %}
+{% load i18n staticfiles crispy_forms_tags %}
+
+{% block form_id %}artfolio_form{% endblock %}
+{% block form_action %}{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}{% endblock %}
+
+{% block modal-body %}
+<style type="text/css">
+a.full-screen {
+    display: none;
+}
+a.close {
+    padding-top: 8px;
+}
+textarea {
+    height: 105px!important;
+}
+.pretty {
+    display: block!important;
+    margin-top: 9px!important;
+    margin-bottom: 18px!important;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+<p>Název obrazu: {{ picture.translation.name }}</p>
+{% thumbnail picture.image "x350" format="PNG" as image %}
+<img style="width: 250px" class="order-project-image" src="{{ image.url }}" />
+{% endthumbnail %}
+{{ block.super }}
+<script type="text/javascript">
+$(function(){
+    $("#artfolio_form .radio").map(function(){
+        $(this).removeClass("radio").addClass("pretty p-default p-round p-smooth");
+        $(this).find("input").appendTo($(this));
+        $(this).append("<div class='state p-primary'></div>");
+        $(this).find("label").appendTo($(this).find(".state"));
+    });
+});
+</script>
+{% endblock %}
+
+{% block modal-footer %}
+<input class="btn btn-default center-block btn-submit-footer-modal" type="submit" value="{{ submit_label }}" />
+{% endblock %}
