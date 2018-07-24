@@ -1,10 +1,48 @@
 {% load i18n crispy_forms_tags leonardo_tags leonardo_page_tags thumbnail %}
 
+<style type="text/css">
+.glyphicon-ok:before {
+    content: "\f00c";
+    font-family: fontawesome;
+}
+</style>
+
 <form id="searchform" action="{% app_reverse 'art_search' 'leonardo_module_art_folio.apps.projects' %}" method="get" accept-charset="utf-8">
   <div class="input-group">
-    <input class="form-control" name="q" type="text" placeholder="Hledaný výraz...">
+    <input class="form-control" name="name" {% if get_name %}value="{{ get_name }}"{% endif %} type="text" placeholder="Hledaný výraz...">
+    <select class="selectpicker" data-width="170px" name="categories" data-live-search="true" multiple title="{% trans 'Choose category' %}">
+      {% for category in all_categories %}
+      <option value="{{ category.id }}" {% if category in selected_categories %}selected{% endif %}>{{ category.translation.name }}</option>
+      {% endfor %}
+    </select>
+    <select class="selectpicker" data-width="170px" name="themes" data-live-search="true" multiple title="{% trans 'Choose theme' %}">
+      {% for theme in all_themes %}
+      <option value="{{ theme.id }}" {% if theme in selected_themes %}selected{% endif %}>{{ theme.translation.name }}</option>
+      {% endfor %}
+    </select>
+    <select class="selectpicker" data-width="170px" name="colors" data-live-search="true" multiple title="{% trans 'Choose color' %}">
+      {% for color in all_colors %}
+      <option value="{{ color.id }}" {% if color in selected_colors %}selected{% endif %}>{{ color.translation.name }}</option>
+      {% endfor %}
+    </select>
+    <select class="selectpicker" data-width="170px" name="formats" data-live-search="true" multiple title="{% trans 'Choose format' %}">
+      {% for format in all_formats %}
+      <option value="{{ format.id }}" {% if format in selected_formats %}selected{% endif %}>{{ format.translation.name }}</option>
+      {% endfor %}
+    </select>
+    <select class="selectpicker" data-width="170px" name="status" data-live-search="false" multiple title="{% trans 'Availability' %}">
+      {% for status_key, status_name in all_statuses %}
+      <option value="{{ status_key }}" {% if status_key in selected_status %}selected{% endif %}>{{ status_name }}</option>
+      {% endfor %}
+    </select>
     <span class="input-group-btn">
       <button class="btn btn-default" type="submit">Vyhledat</button>
     </span>
   </div>
 </form>
+
+<script type="text/javascript">
+$(function(){
+  $(".selectpicker").selectpicker();
+});
+</script>

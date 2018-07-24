@@ -12,7 +12,6 @@ class Default(object):
     def apps(self):
         return [
             'leonardo_module_art_folio',
-
         ]
 
     @property
@@ -32,12 +31,14 @@ class Default(object):
         return [
             'css/slick.css',
             'css/slick-theme.css',
+            'css/bootstrap-select.min.css',
         ]
     
     @property
     def js_files(self):
         return [
-            'js/slick.min.js'
+            'js/slick.min.js',
+            'js/bootstrap-select.min.js',
         ]
 
     config = {

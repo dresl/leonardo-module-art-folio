@@ -1,0 +1,411 @@
+{% load i18n %}
+{% load leonardo_tags leonardo_page_tags thumbnail %}
+
+<style type="text/css">
+.project-image {
+  margin: 0px;
+  width: 100%;
+}
+.project-image.image-portrait {
+    height: 100vh;
+    width: auto;
+    margin: 0 auto;
+}
+.nav-pills li a {
+    color: #333333;
+}
+.nav-stacked.second-nav {
+    margin-left: 32px;
+    border-left: 1px solid #333333;
+}
+.bold {
+    font-weight: bold;
+}
+.object-text {
+    text-align: center;
+}
+
+.object-text a {
+    color: #333333;
+}
+
+/* info object */
+
+.info-object {
+    display: none;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.info-object h2 {
+    text-transform: uppercase;
+    font-size: 17px;
+    font-weight: bold;
+    padding-top: 28px;
+    line-height: 20px;
+}
+.info-object span {
+    padding-bottom: 25px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+}
+.info-object p {
+    font-size: 14px;
+}
+.info-object .btn-order {
+    margin-top: 5px;
+}
+
+/* button slide open */
+.btn-open-panel .btn-title {
+    background-color: #fff;
+    font-weight: bold;
+    height: 40px;
+    width: auto;
+    right: 0;
+    font-size: 12px;
+    padding: 12px 24px;
+    top: 39px;
+    transform: rotate(-90deg) translate(0, -100%);
+    transform-origin: 100% 0;
+    position: absolute;
+    text-align: center;
+    white-space: nowrap;
+    text-transform: uppercase;
+    transition: all 0.5s ease;
+}
+
+.more-info-opened .btn-open-panel .btn-title {
+    right: -42px!important;
+}
+
+/* categories */
+.categories {
+    position: fixed;
+    background-color: #fff;
+    width: 100%;
+    bottom: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 20;
+}
+.object-detail.categoreis-opened .categories {
+    height: 200px;
+}
+.categories .container {
+    padding: 37px 0px;
+    display: block;
+}
+.categories ul .category-item {
+    width: calc(100%/8);
+    float: left;
+    padding: 0px 3px;
+}
+.categories ul .category-item.active {
+    box-shadow: 0px 0px 17px 1px #ccc;
+}
+.categories ul .category-item img {
+    width: 100%;
+    border: 1px solid #bfbfbf;
+}
+.categories ul .category-item span {
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    padding-bottom: 2px;
+}
+
+.btn-categories {
+    position: fixed;
+    display: inline-block;
+    background-color: #fff;
+    margin-top: -36px;
+    padding: 9px 26px;
+    left: 100px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    width: auto;
+    white-space: nowrap;
+    cursor: pointer;
+    bottom: 0;
+    z-index: 20;
+    transition: all 0.5s ease;
+}
+.btn-categories .title {
+    display: inline-block;
+    padding-right: 10px;
+}
+.btn-categories .arrow {
+    border: 2px solid #333;
+    border-width: 0 1px 1px 0;
+    transform: rotate(225deg);
+    -webkit-transform: rotate(225deg);
+    margin-left: 1px;
+    padding: 5px;
+    height: 12px;
+    margin-top: 6px;
+    display: inline-block;
+    position: absolute;
+    transition: all 0.5s ease;
+}
+.object-detail.categoreis-opened .btn-categories {
+    bottom: 200px;
+}
+.object-detail.categoreis-opened .btn-categories .arrow {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin-top: -2px;
+}
+.alert-dismissable .close {
+    left: -7px;
+}
+
+/* similar */
+ul.categories-menu.similar-images-preview.slick-slider {
+    padding-left: 0;
+}
+.categories .similar-images-preview .slick-slide {
+    transition: all 0.1s ease;
+    margin-top: 10px;
+    margin-left: 19px;
+    margin-bottom: 19px;
+    max-height: 122px!important;
+}
+.categories .similar-images-preview img {
+    width: 100%;
+    cursor: pointer;
+}
+.categories .similar-images-preview .slick-slide.is-active,
+.categories .similar-images-preview .slick-slide:hover {
+    box-shadow: 0px 0px 13px 4px #9c9c9c;
+}
+.picture-counter {
+    padding: 12px 0px 0px 17px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* search tab */
+.search-tab {
+    position: fixed;
+    left: 0;
+    top: 12px;
+    z-index: 15;
+}
+</style>
+
+<div class="object-detail more-info-opened categoreis-opened" slick-active-id="">
+    <div class="row">
+        <!-- <h1>{{ object.translation.title }}</h1> -->
+        <div class="col-xs-12 padding-none main-images-preview">
+
+            {% for picture in picture_list %}
+            <div class="object-image" slick-info-id="info-slick-{{ picture.id }}">
+                {% thumbnail picture.image "1920x1080" format="PNG" as image %}
+                <img class="project-image" data-lazy="{{ image.url }}" />
+                {% endthumbnail %}
+                <script type="text/javascript">
+                $(function(){
+                    $("<div class='info-object info-slick' slick-info-id='info-slick-{{ picture.id }}'>\
+                    <h2>{{ picture.translation.name }}</h2>\
+                    <span>{% for format in picture.image_format.all %}{{ format.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>\
+                    {{ picture.translation.description|escapejs|safe }}\
+                    {% if picture.categories.count > 0 %}\
+                    <p>Typ: {% for tag in picture.categories.all %}{{ tag.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>\
+                    {% endif %}\
+                    {% if picture.theme.count > 0 %}\
+                    <p>Téma: {% for theme in picture.theme.all %}{{ theme.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>\
+                    {% endif %}\
+                    {% if picture.status == 'copy' %}\
+                    <p class='status available'>{% trans 'Available' %}</p>\
+                    {% else %}\
+                    <p class='status {{ picture.status }}'><b>{{ picture.get_status_display }}</b></p>\
+                    {% endif %}\
+                    {% if picture.status != 'reserve' %}\
+                    <a class='ajax-modal btn btn-order' href='{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Reserve' %}</a><br>\
+                    {% endif %}\
+                    <a class='ajax-modal btn btn-order' href='{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Make copy' %}</a>\
+                    </div>").appendTo($(".panel-more-info"));
+                    $("<span class='btn-title' slick-info-id='info-slick-{{ picture.id }}'>{{ picture.translation.name }}</span>").appendTo($(".btn-open-panel"));
+                });
+                </script>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="btn-categories">
+            <span class="title">Související</span>
+            <span class="arrow"></span>
+        </div>
+        <div class="categories">
+            <div class="container-fluid">
+                <span class="picture-counter">{% trans 'Number of searched pictures' %}: {{ picture_list.count }}</span>
+                <ul class="categories-menu similar-images-preview">
+                {% for sim_item in similar %}
+                    {% if search_view == True %}
+                    <div class="object-image">
+                        {{ sim_item.translation.name }}
+                        {% thumbnail sim_item.image "x200" format="PNG" as sim_image %}
+                        <img class="" data-lazy="{{ sim_image.url }}" />
+                        {% endthumbnail %}
+                    </div>
+                    {% else %}
+                    <a href="{% app_reverse 'art_detail_project' 'leonardo_module_art_folio.apps.projects' slug=sim_item.translation.slug %}">
+                        <li class="category-item {% if sim_item.translation.slug in request.path %}active{% endif %}">
+                            <span>{{ sim_item.translation.name }}</span>
+                            {% thumbnail sim_item.primary_image.image "x200" as projectThumb %}
+                            <img src="{{ projectThumb.url }}">
+                            {% endthumbnail %}
+                        </li>
+                    </a>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="btn-open-panel more-info">
+        <span class="open"></span>
+    </div>
+    <div class="panel-more-info">
+        <span class="close">×</span>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $(".main-images-preview").slick({
+        infinite: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots: false,
+        lazyLoad: 'ondemand',
+    });
+    
+    // toggle class on btn more info
+    $(".btn-open-panel").click(function(){
+        $(".object-detail").toggleClass("more-info-opened");
+    });
+    $(".panel-more-info .close").click(function(){
+        $(".object-detail").toggleClass("more-info-opened");
+    });
+    $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+
+    // toggle class on catgories
+    $(".btn-categories").click(function(){
+        $(".object-detail").toggleClass("categoreis-opened");
+    });
+
+    // go to proper slide
+    if (window.location.hash.replace("#/","").indexOf("slick-slide-") >= 0 ) {
+        var ID = window.location.hash.replace("#/slick-slide-","");
+        var slideIndex = $(".object-image[slick-info-id*='info-slick-" + ID + "']").attr("data-slick-index");
+        $('.main-images-preview').slick("slickGoTo", slideIndex, "true");
+    }
+
+    // left info panel functions
+    function compareInfoContentSlickActive(element) {
+        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+            $(element).animate({opacity:1},300).show();
+        } else {
+            $(element).animate({opacity:0},300).hide();
+        }
+    }
+    function compareBtnOpenInfoSlickActive(element) {
+        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+            $(element).css("right", "0px");
+        } else {
+            $(element).css("right", "-42px");
+        }
+    }
+    // fix portrait picture
+    function fixPortraitPicture(element) {
+        $(element).map(function(){
+            if ($(this).height() >= $(this).width()) {
+                $(this).addClass("image-portrait");
+            }
+        });
+    }
+
+    // info inner content, btn onload and portrait picture
+    $(".info-object.info-slick").map(function(){
+        compareInfoContentSlickActive($(this));
+    });
+    $(".btn-open-panel .btn-title").map(function(){
+        compareBtnOpenInfoSlickActive($(this));
+    });
+    fixPortraitPicture($(".slick-current.slick-active .project-image"));
+
+    // info inner content, btn afterChange and portrait picture
+    $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
+        $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+        $(".info-object.info-slick").map(function(){
+            compareInfoContentSlickActive($(this));
+        });
+        $(".btn-open-panel .btn-title").map(function(){
+            compareBtnOpenInfoSlickActive($(this));
+        });
+        fixPortraitPicture($(".slick-slide[data-slick-index=" + currentSlide + "]").find(".project-image"));
+        setTimeout(function(){
+            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("slick-info-id").replace("info-slick-","");
+        });
+    });
+
+});
+</script>
+
+{% if search_view == True %}
+<script type="text/javascript">
+$(function(){
+    $('.similar-images-preview')
+    .on('init', function(event, slick) {
+        $('.similar-images-preview .slick-slide.slick-current').addClass('is-active');
+    })
+    .slick({
+        swipeToSlide: true,
+        slidesToShow: 8,
+        slidesToScroll: 3,
+        dots: false,
+        focusOnSelect: false,
+        infinite: false,
+        lazyLoad: 'ondemand',
+        responsive: [{
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 5,
+                slidesToScroll: 5,
+            }
+        }, {
+            breakpoint: 640,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 4,
+            }
+        }, {
+            breakpoint: 420,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+        }
+        }]
+    });
+    /* sync sliders */
+    $('.main-images-preview').on('afterChange', function(event, slick, currentSlide) {
+        $('.similar-images-preview').slick('slickGoTo', currentSlide);
+        var currrentNavSlideElem = '.similar-images-preview .slick-slide[data-slick-index="' + currentSlide + '"]';
+        $('.similar-images-preview .slick-slide.is-active').removeClass('is-active');
+        $(currrentNavSlideElem).addClass('is-active');
+    });
+
+    $('.similar-images-preview').on('click', '.slick-slide', function(event) {
+        event.preventDefault();
+        var goToSingleSlide = $(this).data('slick-index');
+
+        $('.main-images-preview').slick('slickGoTo', goToSingleSlide);
+    });
+});
+</script>
+{% endif %}

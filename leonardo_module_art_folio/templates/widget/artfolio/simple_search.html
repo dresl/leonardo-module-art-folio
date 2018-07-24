@@ -1,0 +1,17 @@
+{% extends widget.get_base_template %}
+
+{% load i18n %}
+{% load leonardo_tags leonardo_page_tags thumbnail %}
+
+{% block content %}
+<style type="text/css">
+input[type=text] {
+  width: 170px!important;
+}
+</style>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    {% include "leonardo_module_art_folio/search_form.html" with all_categories=widget.get_image_categories all_themes=widget.get_image_themes all_colors=widget.get_image_colors all_formats=widget.get_image_formats all_statuses=widget.get_image_statuses %}
+  </div>
+</div>
+{% endblock %}

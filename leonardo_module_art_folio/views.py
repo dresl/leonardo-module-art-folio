@@ -17,14 +17,21 @@ from django.template import RequestContext
 from django.utils.encoding import uri_to_iri
 from django.utils.translation import ugettext_lazy as _
 from constance import config
-from .models import Project, ProjectImage, ProjectImageOrder
+from .models import (Project, ProjectImage,
+                    ProjectImageOrder, ImageCategory,
+                    ImageTheme, ImageColors, ImageFormat)
 from .forms import ProjectImageOrderForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import dates
 from django.views.generic import DetailView, ListView, RedirectView
 import operator
 from django.db.models import Q
+from django.utils.text import slugify
 
+CHOICES_AVAILABILITY = (
+    ('available', _('Available')),
+    ('reserve', _('Reserved')),
+)
 
 class ProjectListView(ListView):
     queryset = Project.objects.all()
@@ -35,64 +42,116 @@ class ProjectDetailView(DetailView):
     slug_field = 'translations__slug'
 
     def get_context_data(self, **kwargs):
-      context = super(ProjectDetailView, self).get_context_data(**kwargs)
-      context['projects'] = Project.objects.all()
-      return context
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        context['projects'] = Project.objects.all()
+        context['all_categories'] = ImageCategory.objects.all()
+        context['all_themes'] = ImageTheme.objects.all()
+        context['all_colors'] = ImageColors.objects.all()
+        context['all_formats'] = ImageFormat.objects.all()
+        context['all_statuses'] = CHOICES_AVAILABILITY
+        return context
 
 
-class ProjectSearchView(ListView):
+class ProjectImageSearchView(ListView):
     template_name = "leonardo_module_art_folio/project_search.html"
     model = ProjectImage
-    paginate_by = 5
     queryset = ProjectImage.objects.all()
 
     def get_context_data(self, **kwargs):
-        context = super(ProjectSearchView, self).get_context_data(**kwargs)
+        context = super(ProjectImageSearchView, self).get_context_data(**kwargs)
+        picture_list = self.model.objects.all()
+
+        # name
+        name = self.request.GET.get('name')
+        if name != None:
+            picture_list = picture_list.filter(translations__slug__icontains=slugify(name))
+            context['get_name'] = name
+        else:
+            picture_list = picture_list
         
-        try:
-          name = self.request.GET.get('q')
-        except:
-          name = ''
-        
-        if name == None:
-          name = ""
+        # category
+        categories_id = self.request.GET.getlist('categories')
+        if len(categories_id) != 0:
+            image_categories = ImageCategory.objects.filter(id__in=categories_id)
+            picture_list = picture_list.filter(categories=image_categories).distinct().order_by("categories")
+            context['selected_categories'] = image_categories
+        else:
+            picture_list = picture_list
 
-        list_picture = self.model.objects.filter(translations__name__icontains=name)
+        # theme
+        themes_id = self.request.GET.getlist('themes')
+        if len(themes_id) != 0:
+            image_themes = ImageTheme.objects.filter(id__in=themes_id)
+            picture_list = picture_list.filter(theme=image_themes).distinct().order_by("theme")
+            context['selected_themes'] = image_themes
+        else:
+            picture_list = picture_list
 
-        paginator = Paginator(list_picture, self.paginate_by)
-        page = self.request.GET.get('page')
-        try:
-            pictures = paginator.page(page)
-        except PageNotAnInteger:
-            pictures = paginator.page(1)
-        except EmptyPage:
-            pictures = paginator.page(paginator.num_pages)
+        # color
+        colors_id = self.request.GET.getlist('colors')
+        if len(colors_id) != 0:
+            image_colors = ImageColors.objects.filter(id__in=colors_id)
+            picture_list = picture_list.filter(colors=image_colors).distinct().order_by("colors")
+            context['selected_colors'] = image_colors
+        else:
+            picture_list = picture_list
 
-        context['picture_list'] = pictures
+        # format
+        formats_id = self.request.GET.getlist('formats')
+        if len(formats_id) != 0:
+            image_formats = ImageFormat.objects.filter(id__in=formats_id)
+            picture_list = picture_list.filter(image_format=image_formats).distinct().order_by("image_format")
+            context['selected_formats'] = image_formats
+        else:
+            picture_list = picture_list
+
+        # format
+        status_id = self.request.GET.getlist('status')
+        if len(status_id) != 0:
+            if "available" in status_id:
+                status_id.append("copy")
+            picture_list = picture_list.filter(status__in=status_id).distinct().order_by("status")
+            context['selected_status'] = status_id
+        else:
+            picture_list = picture_list
+
+        context['all_categories'] = ImageCategory.objects.all()
+        context['all_themes'] = ImageTheme.objects.all()
+        context['all_colors'] = ImageColors.objects.all()
+        context['all_formats'] = ImageFormat.objects.all()
+        context['all_statuses'] = CHOICES_AVAILABILITY
+        context['picture_list'] = picture_list
+        context['projects'] = Project.objects.all()
         return context
 
 
 class ProjectImageOrderCreate(forms.ModalFormView):
     form_class = ProjectImageOrderForm
     template_name = "leonardo_module_art_folio/orderimage_form.html"
-    submit_label = "Objednat"
+    submit_label = "Rezervovat"
     success_url = "/"
 
     def get_context_data(self, **kwargs):
-        ret = super(ProjectImageOrderCreate, self).get_context_data(**kwargs)
+        context = super(ProjectImageOrderCreate, self).get_context_data(**kwargs)
         if self.request.method == 'POST':
-            ret['orderimage'] = ProjectImageOrderForm(self.request.POST)
+            context['orderimage'] = ProjectImageOrderForm(self.request.POST)
         else:
-            ret['orderimage'] = ProjectImageOrderForm()
+            context['orderimage'] = ProjectImageOrderForm()
         picture_pk = self.kwargs.get('pk')
 
-        ret.update({
+        if self.kwargs.get('copy'):
+            copy_view = True
+        else:
+            copy_view = False
+
+        context.update({
             "view_name": "Objednávací formulář",
             "modal_size": 'md',
             "modal_header": 'Objednávací formulář',
+            "copy_view": copy_view,
             "picture": ProjectImage.objects.get(pk=picture_pk)
             })
-        return ret
+        return context
 
     def get_initial(self):
         return {'picture': self.kwargs.get('pk')}

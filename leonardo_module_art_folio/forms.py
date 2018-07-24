@@ -27,7 +27,6 @@ from leonardo.utils.emails import send_templated_email as send_mail
 
 CHOICES_STATUS = (
     ('reserve', _('Reserve')),
-    ('sell', _('Buy')),
     ('copy', _('Make copy')),
 )
 
@@ -108,12 +107,13 @@ class ProjectImageOrderForm(SelfHandlingForm):
             'leonardo_module_art_folio/orderimage_email.html', {
                 'order_title': u"Objednávka",
                 'order': picture_order,
+                'domain': request.site.domain,
             },
             [email.strip() for email in settings.ORDER_DEFAULT_TO_EMAIL.split(',')],
             fail_silently=False,
         )
         # send confirmation
-        subject_confirmation = u"Potvrzení o objednávce - tiskupce.cz"
+        subject_confirmation = u"Potvrzení o objednávce - " + request.site.domain
         send_mail(
             subject_confirmation,
             'leonardo_module_art_folio/orderimage_email.html', {

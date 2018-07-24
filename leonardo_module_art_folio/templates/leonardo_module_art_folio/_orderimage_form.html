@@ -4,7 +4,13 @@
 {% load i18n staticfiles crispy_forms_tags %}
 
 {% block form_id %}artfolio_form{% endblock %}
-{% block form_action %}{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}{% endblock %}
+{% block form_action %}
+{% if copy_view %}
+{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}
+{% else %}
+{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}
+{% endif %}
+{% endblock %}
 
 {% block modal-body %}
 <style type="text/css">
@@ -24,10 +30,22 @@ textarea {
 }
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
-<p>Název obrazu: {{ picture.translation.name }}</p>
-{% thumbnail picture.image "x350" format="PNG" as image %}
-<img style="width: 250px" class="order-project-image" src="{{ image.url }}" />
-{% endthumbnail %}
+<h4>Název obrazu: <b>{{ picture.translation.name }}</b></h4>
+<div class="row">
+    <div class="col-md-6 padding-none">
+    {% thumbnail picture.image "x350" format="PNG" as image %}
+    <img style="width: 250px" class="order-project-image" src="{{ image.url }}" />
+    {% endthumbnail %}
+    </div>
+    <div class="col-md-6 padding-none">
+        <p>{% trans "Format" %}: {% for format in picture.image_format.all %}{{ format.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+        {% if picture.status == 'copy' %}
+        <p class='status available'>{% trans 'Available' %}</p>
+        {% else %}
+        <p class="status {{ picture.status }}">{{ picture.get_status_display }}</p>
+        {% endif %}
+    </div>
+</div>
 {{ block.super }}
 <script type="text/javascript">
 $(function(){
@@ -37,6 +55,29 @@ $(function(){
         $(this).append("<div class='state p-primary'></div>");
         $(this).find("label").appendTo($(this).find(".state"));
     });
+    function setButtonSubmitText() {
+        if ($("input[value=copy]").is(":checked")) {
+            $(".btn-submit-footer-modal").attr("value", "Nechat si udělat kopii");
+            $("#artfolio_form").attr("action", "{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}");
+        }
+        if ($("input[value=reserve]").is(":checked")) {
+            $(".btn-submit-footer-modal").attr("value", "Rezervovat");
+            $("#artfolio_form").attr("action", "{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}");
+        }
+    };
+    $("input[type=radio]").click(function(){
+        setButtonSubmitText();
+    });
+    {% if picture.status == 'reserve' %}
+    $("input[value=reserve]").parent().remove();
+    {% endif %}
+    {% if copy_view %}
+    $("input[value=copy]").trigger("click");
+    setButtonSubmitText();
+    {% else %}
+    $("input[value=reserve]").trigger("click");
+    setButtonSubmitText();
+    {% endif %}
 });
 </script>
 {% endblock %}

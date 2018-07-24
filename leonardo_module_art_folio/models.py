@@ -2,16 +2,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from feincms.translations import (TranslatedObjectManager,
                                   TranslatedObjectMixin, Translation)
+from django.utils import timezone
 from django.core.urlresolvers import reverse
-from leonardo.module.media.models.foldermodels import Folder
-from leonardo.module.media.models.media import Video
-from leonardo.module.media.models.imagemodels import Image
-from leonardo.module.media.models.filemodels import File
 
 CHOICES_STATUS = (
     ('available', _('Available')),
     ('reserve', _('Reserved')),
-    ('sell', _('Sold')),
     ('copy', _('Make copy')),
 )
 
@@ -46,13 +42,6 @@ class Project(models.Model, TranslatedObjectMixin):
         return self.images.filter(featured=True).first()
 
     @property
-    def files(self):
-        try:
-            files = File.objects.filter(folder_id=self.folder.id)
-        except:
-            files = []
-        return files
-
     def get_absolute_url(self):
         from leonardo.module.web.widget.application.reverse import app_reverse
         return app_reverse(
@@ -355,6 +344,12 @@ class ProjectImage(models.Model, TranslatedObjectMixin):
     status = models.CharField(
         verbose_name=("Status"), default=CHOICES_STATUS[0][0], choices=CHOICES_STATUS, max_length=255)
 
+    pub_date = models.DateTimeField(
+        _('Published on'),
+        blank=True, null=True, default=timezone.now, db_index=True,
+        help_text=_(
+            'Will be filled in automatically when picture gets published.'))
+
     objects = TranslatedObjectManager()
 
     class Meta:
@@ -391,6 +386,7 @@ class ProjectImageTranslation(Translation(ProjectImage)):
 
     name = models.CharField(
         verbose_name=_("Name"), max_length=255, default='')
+    slug = models.SlugField(_("Slug"), default="")
     description = models.TextField(
         verbose_name=_("Description"), blank=True, null=True, default='')
 

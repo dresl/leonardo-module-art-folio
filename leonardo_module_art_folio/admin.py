@@ -35,7 +35,10 @@ ProjectTranslation_Inline = admin_translationinline(
     })
 
 ProjectImageTranslation_Inline = admin_translationinline(
-    ProjectImageTranslation, formfield_overrides={
+    ProjectImageTranslation,
+    prepopulated_fields={
+        'slug': ('name',)
+    }, formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
 
@@ -122,13 +125,13 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class ProjectImageAdmin(admin.ModelAdmin):
     inlines = [ProjectImageTranslation_Inline]
-    list_display = ["__unicode__", thumb, "status", "ordering", "featured"]
+    list_display = ["__unicode__", thumb, "status", "ordering", "pub_date", "featured"]
     list_editable = ["status", "ordering", "featured"]
-    list_filter = ["project", "categories"]
+    list_filter = ["image_format", "colors", "theme", "categories", "project"]
     search_fields = ['translations__name']
-    fields = ["image", "categories", "theme",
+    fields = ["project", "image", "categories", "theme",
               "image_format", "colors", "technique",
-               "status", "ordering", "featured", thumb_large]
+               "status", "ordering", "pub_date", "featured", thumb_large]
     readonly_fields = [thumb_large]
 
 

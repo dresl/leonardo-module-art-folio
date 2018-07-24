@@ -3,7 +3,9 @@
 <table style="border: 1px solid #e8e8e8;padding: 6px;width: 100%;border-collapse: collapse;">
     <tr style="background-color: #f3f3f3">
         <th style="text-align: left;padding: 8px;">Název obrazu:</th>
-        <th style="text-align: left;padding: 8px;">{{ order.picture.translation.name }}</th>
+        <th style="text-align: left;padding: 8px;">
+            <a href="{{ domain }}/admin/leonardo_module_art_folio/projectimage/{{ order.picture.id }}/" target="_blank">{{ order.picture.translation.name }}</a>
+        </th>
     </tr>
     <tr style="background-color: #ffffff">
         <td style="text-align: left;padding: 8px">Jméno:</td>
