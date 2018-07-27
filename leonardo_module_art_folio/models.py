@@ -5,10 +5,15 @@ from feincms.translations import (TranslatedObjectManager,
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 
-CHOICES_STATUS = (
+CHOICES_IMAGE_STATUS = (
     ('available', _('Available')),
     ('reserve', _('Reserved')),
     ('copy', _('Make copy')),
+)
+
+CHOICES_PRODUCT_STATUS = (
+    ('available', _('Available')),
+    ('sold_out', _('Sold out')),
 )
 
 class Project(models.Model, TranslatedObjectMixin):
@@ -342,7 +347,7 @@ class ProjectImage(models.Model, TranslatedObjectMixin):
         verbose_name=_("Featured Image"), default=False)
     # status
     status = models.CharField(
-        verbose_name=("Status"), default=CHOICES_STATUS[0][0], choices=CHOICES_STATUS, max_length=255)
+        verbose_name=("Status"), default=CHOICES_IMAGE_STATUS[0][0], choices=CHOICES_IMAGE_STATUS, max_length=255)
 
     pub_date = models.DateTimeField(
         _('Published on'),
@@ -420,3 +425,77 @@ class ProjectImageOrder(models.Model):
         ordering = ['pub_date', ]
         verbose_name = _('Picture Order')
         verbose_name_plural = _('Picture Orders')
+
+
+class OtherProduct(models.Model, TranslatedObjectMixin):
+
+    project = models.ForeignKey(
+        Project, related_name="products", verbose_name=_("Project"))
+    image = models.ImageField(
+        verbose_name=_("Product Image"), upload_to="project_images/")
+    # main attributes
+    number = models.PositiveIntegerField(
+        verbose_name=_("Number of products"), default=20, blank=True, null=True)
+    categories = models.ManyToManyField(
+        ImageCategory, verbose_name=_("Categories"), blank=True, null=True)
+    # others
+    ordering = models.PositiveIntegerField(
+        verbose_name=_("Ordering"), default=0)
+    featured = models.BooleanField(
+        verbose_name=_("Featured Image"), default=False)
+    # status
+    status = models.CharField(
+        verbose_name=("Status"), default=CHOICES_PRODUCT_STATUS[0][0], choices=CHOICES_PRODUCT_STATUS, max_length=255)
+
+    pub_date = models.DateTimeField(
+        _('Published on'),
+        blank=True, null=True, default=timezone.now, db_index=True,
+        help_text=_(
+            'Will be filled in automatically when picture gets published.'))
+
+    objects = TranslatedObjectManager()
+
+    class Meta:
+        verbose_name = _("Other product")
+        verbose_name_plural = _("Other products")
+        ordering = ['ordering']
+
+    def __unicode__(self):
+        trans = None
+
+        # This might be provided using a .extra() clause to avoid hundreds of
+        # extra queries:
+        if hasattr(self, "preferred_translation"):
+            trans = getattr(self, "preferred_translation", u"")
+        else:
+            try:
+                trans = unicode(self.translation)
+            except models.ObjectDoesNotExist:
+                pass
+            except AttributeError:
+                pass
+
+        if trans:
+            return trans
+        else:
+            return str(self.ordering)
+
+
+class OtherProductTranslation(Translation(OtherProduct)):
+
+    """
+    Translated Other product.
+    """
+
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=255, default='')
+    slug = models.SlugField(_("Slug"), default="")
+    description = models.TextField(
+        verbose_name=_("Description"), blank=True, null=True, default='')
+
+    class Meta:
+        verbose_name = _("Translation")
+        verbose_name_plural = _("Translations")
+
+    def __unicode__(self):
+        return self.name

@@ -15,7 +15,9 @@ from .models import (Project,
                      ImageFormatTranslation,
                      ImageTechnique,
                      ImageTechniqueTranslation,
-                     ProjectImageOrder
+                     ProjectImageOrder,
+                     OtherProduct,
+                     OtherProductTranslation,
                     )
 
 from feincms.translations import admin_translationinline
@@ -69,6 +71,14 @@ ImageFormatTranslation_Inline = admin_translationinline(
 ImageTechniqueTranslation_Inline = admin_translationinline(
     ImageTechniqueTranslation,
     formfield_overrides={
+        models.TextField: {'widget': CKEditorWidget}
+    })
+
+OtherProductTranslation_Inline = admin_translationinline(
+    OtherProductTranslation,
+    prepopulated_fields={
+        'slug': ('name',)
+    }, formfield_overrides={
         models.TextField: {'widget': CKEditorWidget}
     })
 
@@ -135,6 +145,17 @@ class ProjectImageAdmin(admin.ModelAdmin):
     readonly_fields = [thumb_large]
 
 
+class OtherProductAdmin(admin.ModelAdmin):
+    inlines = [OtherProductTranslation_Inline]
+    list_display = ["__unicode__", thumb, "number", "status", "pub_date"]
+    list_editable = ["number", "status"]
+    list_filter = ["status", "categories", "project"]
+    search_fields = ['translations__name']
+    fields = ["project", "image", "categories", "number",
+              "status", "ordering", "pub_date", "featured", thumb_large]
+    readonly_fields = [thumb_large]
+
+
 class ImageCategoryAdmin(admin.ModelAdmin):
     inlines = [ImageCategoryTranslation_Inline]
     list_display = ["__unicode__", "ordering"]
@@ -176,4 +197,5 @@ admin.site.register(ImageTheme, ImageThemeAdmin)
 admin.site.register(ImageColors, ImageColorsAdmin)
 admin.site.register(ImageFormat, ImageFormatAdmin)
 admin.site.register(ImageTechnique, ImageTechniqueAdmin)
+admin.site.register(OtherProduct, OtherProductAdmin)
 admin.site.register(ProjectImageOrder, ProjectImageOrderAdmin)
