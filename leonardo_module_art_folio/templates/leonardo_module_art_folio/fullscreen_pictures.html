@@ -320,8 +320,10 @@ $(function(){
     $(".btn-open-panel .btn-title").map(function(){
         compareBtnOpenInfoSlickActive($(this));
     });
-    fixPortraitPicture($(".slick-current.slick-active .project-image"));
-
+    setInterval(function(){
+        fixPortraitPicture($(".slick-current.slick-active .project-image"));
+    }, 250);
+    
     // info inner content, btn afterChange and portrait picture
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
         $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
@@ -331,7 +333,7 @@ $(function(){
         $(".btn-open-panel .btn-title").map(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
-        setTimeout(function(){
+        setInterval(function(){
             window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("slick-info-id").replace("info-slick-","");
             fixPortraitPicture($(".slick-slide[data-slick-index=" + currentSlide + "]").find(".project-image"));
         }, 250);
