@@ -4,7 +4,11 @@
     <tr style="background-color: #f3f3f3">
         <th style="text-align: left;padding: 8px;">Název obrazu:</th>
         <th style="text-align: left;padding: 8px;">
+            {% if domain %}
             <a href="{{ domain }}/admin/leonardo_module_art_folio/projectimage/{{ order.picture.id }}/" target="_blank">{{ order.picture.translation.name }}</a>
+            {% else %}
+            {{ order.picture.translation.name }}
+            {% endif %}
         </th>
     </tr>
     <tr style="background-color: #ffffff">

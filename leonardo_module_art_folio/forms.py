@@ -26,8 +26,8 @@ from leonardo.utils.emails import send_templated_email as send_mail
 
 
 CHOICES_STATUS = (
-    ('reserve', _('Reserve')),
-    ('copy', _('Make copy')),
+    ('sold_out', _('Reserve')),
+    ('copy', _('Order copy')),
 )
 
 class ProjectImageOrderForm(SelfHandlingForm):
@@ -89,7 +89,8 @@ class ProjectImageOrderForm(SelfHandlingForm):
 
     def handle(self, request, data):
         project_image = ProjectImage.objects.get(id=int(data['picture']))
-        project_image.status = data['status']
+        if data['status'] == 'sold_out':
+            project_image.status = data['status']
         project_image.save()
         picture_order = ProjectImageOrder.objects.create(
             picture=project_image,
@@ -97,7 +98,8 @@ class ProjectImageOrderForm(SelfHandlingForm):
             telephone=data['telephone'],
             email=data['email'],
             note=data['note'],
-            pub_date=timezone.now()
+            pub_date=timezone.now(),
+            status=data['status'],
         )
         picture_order.save()
         # send mail
@@ -105,7 +107,7 @@ class ProjectImageOrderForm(SelfHandlingForm):
         send_mail(
             subject_order,
             'leonardo_module_art_folio/orderimage_email.html', {
-                'order_title': u"Objednávka",
+                'order_title': "Objednávka",
                 'order': picture_order,
                 'domain': request.site.domain,
             },
@@ -113,11 +115,10 @@ class ProjectImageOrderForm(SelfHandlingForm):
             fail_silently=False,
         )
         # send confirmation
-        subject_confirmation = u"Potvrzení o objednávce - " + request.site.domain
         send_mail(
-            subject_confirmation,
+            'Potvrzení o objednávce obrazu',
             'leonardo_module_art_folio/orderimage_email.html', {
-                'order_title': u"Potvrzení o objednávce",
+                'order_title': "Potvrzení o objednávce",
                 'order': picture_order,
             },
             picture_order.email,

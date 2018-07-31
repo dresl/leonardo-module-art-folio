@@ -55,6 +55,9 @@
 .info-object .btn-order {
     margin-top: 5px;
 }
+.info-object .actions {
+    padding: 5px 36px;
+}
 
 /* categories */
 .categories {
@@ -72,14 +75,14 @@
     clip-path: inset(-7px -3px 0px -3px);
 }
 .object-detail.categories-opened .categories {
-    height: 200px;
+    height: 230px;
 }
 .categories .container {
     padding: 37px 0px;
     display: block;
 }
 .categories ul .category-item {
-    width: calc(100%/8);
+    width: calc(100%/10);
     float: left;
     padding: 0px 3px;
 }
@@ -105,11 +108,10 @@
     margin-top: -36px;
     padding: 9px 26px;
     left: 100px;
-    text-transform: uppercase;
-    font-weight: bold;
     font-size: 12px;
     width: auto;
     white-space: nowrap;
+    text-transform: uppercase;
     cursor: pointer;
     bottom: 0;
     z-index: 22;
@@ -119,14 +121,18 @@
 }
 .btn-categories .title {
     display: inline-block;
-    padding-right: 10px;
+    padding-right: 20px;
+}
+.btn-categories .title span {
+    font-weight: bold;
+    text-transform: lowercase;
 }
 .btn-categories .arrow {
     border: 2px solid #333;
     border-width: 0 1px 1px 0;
     transform: rotate(225deg);
     -webkit-transform: rotate(225deg);
-    margin-left: 1px;
+    margin-left: -1px;
     padding: 5px;
     height: 12px;
     margin-top: 6px;
@@ -135,7 +141,7 @@
     transition: all 0.5s ease;
 }
 .object-detail.categories-opened .btn-categories {
-    bottom: 200px;
+    bottom: 230px;
 }
 .object-detail.categories-opened .btn-categories .arrow {
     transform: rotate(45deg);
@@ -151,19 +157,14 @@ ul.categories-menu.similar-images-preview.slick-slider {
     padding-left: 0;
 }
 .categories .similar-images-preview .slick-slide {
-    transition: all 0.1s ease;
-    margin-top: 10px;
-    margin-left: 19px;
-    margin-bottom: 19px;
-    max-height: 122px!important;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    max-height: 120px!important;
 }
 .categories .similar-images-preview img {
     width: 100%;
     cursor: pointer;
-}
-.categories .similar-images-preview .slick-slide.is-active,
-.categories .similar-images-preview .slick-slide:hover {
-    box-shadow: 0px 0px 13px 4px #9c9c9c;
 }
 .picture-counter {
     padding: 12px 0px 0px 17px;
@@ -171,13 +172,115 @@ ul.categories-menu.similar-images-preview.slick-slider {
     font-weight: bold;
     font-size: 13px;
 }
+.similar-images-preview .object-image span.title {
+    display: inline-block;
+    margin-top: -20px;
+}
+.categories .top-panel {
+    padding-bottom: 15px;
+}
+.categories .top-panel .close {
+    float: right;
+    font-size: 22px;
+    padding-top: 5px;
+}
+.categories .top-panel .btn-search {
+    display: inline-block;
+    padding: 2px 12px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    margin-left: 126px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    transition: all 0.5s ease;
+    z-index: 50;
+}
+.categories .top-panel .btn-search:hover {
+    box-shadow: 2px 4px 20px -3px #bdbdbd;
+}
+
+/* fullscreeen */
+.btn-fullscreen {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    background-color: #ffffff;
+    z-index: 50;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    padding-left: 7px;
+    box-shadow: 0px 0px 3px #7d7d7d;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+.categories-opened .btn-fullscreen {
+    bottom: 235px;
+}
+#pictureFullscreen {
+    width: 100vw;
+}
+#pictureFullscreen .modal-dialog {
+    width: 95%;
+}
+#pictureFullscreen .modal-body .image-portrait {
+    margin: 0 auto;
+    display: block;
+}
+#pictureFullscreen .close {
+    margin-top: 10px;
+    margin-right: 5px;
+    font-size: 36px;
+}
 
 /* search tab */
 .search-tab {
-    position: fixed;
-    left: 0;
-    top: 12px;
-    z-index: 15;
+    opacity: 0;
+    margin-left: -100%;
+    height: 0;
+    transition: all 0.5s ease;
+    margin-bottom: 32px;
+}
+.object-detail.categories-opened.search-tab-opened .search-tab {
+    opacity: 1;
+    display: block;
+    padding-top: 30px;
+    padding-bottom: 60px;
+    margin: 0 auto;
+    width: 56%;
+    height: 50px;
+    margin-bottom: 0px;
+}
+.search-tab input[type=text] {
+    min-width: 120px!important;
+}
+.search-tab .input-group-btn.submit {
+    padding-left: 15px;
+}
+.search-tab .input-group-btn.submit button {
+    border: none;
+    font-size: 20px;
+    margin-top: -4px;
+    color: #5a5a5a;
+}
+.search-tab .bootstrap-select {
+    padding: 0px 10px;
+}
+.search-tab .bootstrap-select button {
+    border-radius: 1px!important;
+}
+.object-detail.categories-opened.search-tab-opened .categories {
+    height: 290px;
+}
+.object-detail.categories-opened.search-tab-opened .top-panel .btn-search {
+    top: 30px;
+}
+.object-detail.categories-opened.search-tab-opened .btn-categories {
+    bottom: 290px;
+}
+.object-detail.categories-opened.search-tab-opened .btn-fullscreen {
+    bottom: 298px;
 }
 </style>
 
@@ -189,7 +292,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
             {% for picture in picture_list %}
             <div class="object-image" slick-info-id="info-slick-{{ picture.id }}">
                 {% thumbnail picture.image "1920x1080" format="PNG" as image %}
-                <img class="project-image" data-lazy="{{ image.url }}" />
+                <img class="project-image image-{{ picture.id }}" data-lazy="{{ image.url }}" />
                 {% endthumbnail %}
                 <script type="text/javascript">
                 $(function(){
@@ -197,21 +300,17 @@ ul.categories-menu.similar-images-preview.slick-slider {
                     <h2>{{ picture.translation.name }}</h2>\
                     <span>{% for format in picture.image_format.all %}{{ format.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>\
                     {{ picture.translation.description|escapejs|safe }}\
-                    {% if picture.categories.count > 0 %}\
-                    <p>Typ: {% for tag in picture.categories.all %}{{ tag.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>\
-                    {% endif %}\
-                    {% if picture.theme.count > 0 %}\
-                    <p>Téma: {% for theme in picture.theme.all %}{{ theme.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>\
-                    {% endif %}\
+                    <div class='actions'>\
                     {% if picture.status == 'copy' %}\
                     <p class='status available'>{% trans 'Available' %}</p>\
                     {% else %}\
                     <p class='status {{ picture.status }}'><b>{{ picture.get_status_display }}</b></p>\
                     {% endif %}\
-                    {% if picture.status != 'reserve' %}\
-                    <a class='ajax-modal btn btn-order' href='{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Reserve' %}</a><br>\
+                    {% if picture.status != 'sold_out' %}\
+                    <a class='ajax-modal btn btn-order btn-block' href='{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Reserve' %}</a>\
                     {% endif %}\
-                    <a class='ajax-modal btn btn-order' href='{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Make copy' %}</a>\
+                    <a class='ajax-modal btn btn-order btn-block' href='{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Order copy' %}</a>\
+                    </div>\
                     </div>").appendTo($(".panel-more-info"));
                     $("<span class='btn-title' slick-info-id='info-slick-{{ picture.id }}'>{{ picture.translation.name }}</span>").appendTo($(".btn-open-panel"));
                 });
@@ -220,19 +319,30 @@ ul.categories-menu.similar-images-preview.slick-slider {
             {% endfor %}
 
         </div>
+        <div class="btn-fullscreen">
+            <span data-toggle="modal" data-target="#pictureFullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
+        </div>
         <div class="btn-categories">
-            <span class="title">Související</span>
+            <span class="title">
+                {% if search_view %}{% trans "Displayed" %} <span>{{ count_pictures }}</span>{% else %}{% trans "Categories" %}{% endif %}
+            </span>
             <span class="arrow"></span>
         </div>
         <div class="categories">
             <div class="container-fluid">
-                <span class="picture-counter">{% trans 'Number of searched pictures' %}: {{ picture_list.count }}</span>
+                <div class="top-panel">
+                    <span class="btn-search">Vyhledávání <i class="fa fa-search" aria-hidden="true"></i></span>
+                    <span class="close">×</span>
+                    <div class="search-tab">
+                    {% include "leonardo_module_art_folio/search_form.html" %}
+                    </div>
+                </div>
                 <ul class="categories-menu similar-images-preview">
                 {% for sim_item in similar %}
                     {% if search_view == True %}
                     <div class="object-image">
-                        {{ sim_item.translation.name }}
-                        {% thumbnail sim_item.image "x200" format="PNG" as sim_image %}
+                        <span class="title">{{ sim_item.translation.name }}</span>
+                        {% thumbnail sim_item.image "250x200" crop="center" format="PNG" as sim_image %}
                         <img class="" data-lazy="{{ sim_image.url }}" />
                         {% endthumbnail %}
                     </div>
@@ -240,8 +350,8 @@ ul.categories-menu.similar-images-preview.slick-slider {
                     <a href="{% app_reverse 'art_detail_project' 'leonardo_module_art_folio.apps.projects' slug=sim_item.translation.slug %}">
                         <li class="category-item {% if sim_item.translation.slug in request.path %}active{% endif %}">
                             <span>{{ sim_item.translation.name }}</span>
-                            {% thumbnail sim_item.primary_image.image "x200" as projectThumb %}
-                            <img src="{{ projectThumb.url }}">
+                            {% thumbnail sim_item.primary_image.image "250x130" crop="center" as projectThumb %}
+                            <img width="{{ projectThumb.width }}" height="{{ projectThumb.height }}" src="{{ projectThumb.url }}">
                             {% endthumbnail %}
                         </li>
                     </a>
@@ -257,6 +367,23 @@ ul.categories-menu.similar-images-preview.slick-slider {
     <div class="panel-more-info">
         <span class="close">×</span>
     </div>
+    <div id="pictureFullscreen" class="modal modal-lg fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 <script type="text/javascript">
 $(function(){
@@ -268,20 +395,33 @@ $(function(){
         lazyLoad: 'ondemand',
     });
     
-    // toggle class on btn more info
+    // toggle class more info
     $(".btn-open-panel").click(function(){
         $(".object-detail").toggleClass("more-info-opened");
     });
     $(".panel-more-info .close").click(function(){
         $(".object-detail").toggleClass("more-info-opened");
     });
-    $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+
+    // activate search
+    if (location.search != "") {
+        $(".object-detail").addClass("search-tab-opened");
+    }
 
     // toggle class on catgories
     $(".btn-categories").click(function(){
         $(".object-detail").toggleClass("categories-opened");
     });
+    $(".categories .top-panel .close").click(function(){
+        $(".object-detail").toggleClass("categories-opened");
+    });
+    $(".categories .top-panel .btn-search").click(function(){
+        $(".object-detail").toggleClass("search-tab-opened");
+    });
 
+    // fix slick id
+    $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+    
     // go to proper slide
     if (window.location.hash.replace("#/","").indexOf("slick-slide-") >= 0 ) {
         var ID = window.location.hash.replace("#/slick-slide-","");
@@ -307,10 +447,14 @@ $(function(){
     // fix portrait picture
     function fixPortraitPicture(element) {
         $(element).map(function(){
-            if ($(this).height() >= $(this).width()) {
+            if (($(this).width() - $(this).height()) <= 200) {
                 $(this).addClass("image-portrait");
             }
         });
+    }
+    // add image to modal
+    function addImageToModal(element) {
+        $("#pictureFullscreen .modal-body").html(element.clone());
     }
 
     // info inner content, btn onload and portrait picture
@@ -320,9 +464,10 @@ $(function(){
     $(".btn-open-panel .btn-title").map(function(){
         compareBtnOpenInfoSlickActive($(this));
     });
-    setInterval(function(){
+    setTimeout(function(){
         fixPortraitPicture($(".slick-current.slick-active .project-image"));
-    }, 250);
+        addImageToModal($(".slick-current.slick-active .project-image"));
+    }, 500);
     
     // info inner content, btn afterChange and portrait picture
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
@@ -333,9 +478,10 @@ $(function(){
         $(".btn-open-panel .btn-title").map(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
-        setInterval(function(){
+        setTimeout(function(){
             window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("slick-info-id").replace("info-slick-","");
-            fixPortraitPicture($(".slick-slide[data-slick-index=" + currentSlide + "]").find(".project-image"));
+            fixPortraitPicture($(".slick-current.slick-active .project-image"));
+            addImageToModal($(".slick-current.slick-active .project-image"));
         }, 250);
     });
 
@@ -351,7 +497,7 @@ $(function(){
     })
     .slick({
         swipeToSlide: true,
-        slidesToShow: 8,
+        slidesToShow: 10,
         slidesToScroll: 3,
         dots: false,
         focusOnSelect: false,

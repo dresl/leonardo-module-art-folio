@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 
 CHOICES_IMAGE_STATUS = (
     ('available', _('Available')),
-    ('reserve', _('Reserved')),
-    ('copy', _('Make copy')),
+    ('sold_out', _('Not for sale / Sold out')),
+    ('copy', _('Order copy')),
 )
 
 CHOICES_PRODUCT_STATUS = (
@@ -415,6 +415,8 @@ class ProjectImageOrder(models.Model):
         verbose_name=_("E-mail"), default='')
     note = models.TextField(
         verbose_name=_("Note"), default='', blank=True)
+    status = models.CharField(
+        verbose_name="Status", max_length=100, choices=CHOICES_IMAGE_STATUS, default='available')
 
     pub_date = models.DateTimeField(_('Order date'), auto_now_add=True)
 

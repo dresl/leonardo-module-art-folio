@@ -30,7 +30,7 @@ from django.utils.text import slugify
 
 CHOICES_AVAILABILITY = (
     ('available', _('Available')),
-    ('reserve', _('Reserved')),
+    ('sold_out', _('Not for sale / Sold out')),
 )
 
 class ProjectListView(ListView):
@@ -120,6 +120,7 @@ class ProjectImageSearchView(ListView):
         context['all_colors'] = ImageColors.objects.all()
         context['all_formats'] = ImageFormat.objects.all()
         context['all_statuses'] = CHOICES_AVAILABILITY
+        context['count_pictures'] = _("%s of %s") % (picture_list.count(), ProjectImage.objects.count())
         context['picture_list'] = picture_list
         context['projects'] = Project.objects.all()
         return context

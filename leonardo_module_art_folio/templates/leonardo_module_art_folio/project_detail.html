@@ -4,8 +4,5 @@
 {% load leonardo_tags leonardo_page_tags thumbnail %}
 
 {% block content %}
-<div class="container search-tab">
-{% include "leonardo_module_art_folio/search_form.html" %}
-</div>
 {% include "leonardo_module_art_folio/fullscreen_pictures.html" with picture_list=object.images.all similar=projects search_view=False %}
 {% endblock %}

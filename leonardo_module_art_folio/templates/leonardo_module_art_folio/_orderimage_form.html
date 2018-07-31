@@ -57,25 +57,25 @@ $(function(){
     });
     function setButtonSubmitText() {
         if ($("input[value=copy]").is(":checked")) {
-            $(".btn-submit-footer-modal").attr("value", "Nechat si udělat kopii");
+            $(".btn-submit-footer-modal").attr("value", "{% trans 'Order copy' %}");
             $("#artfolio_form").attr("action", "{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}");
         }
-        if ($("input[value=reserve]").is(":checked")) {
-            $(".btn-submit-footer-modal").attr("value", "Rezervovat");
+        if ($("input[value=sold_out]").is(":checked")) {
+            $(".btn-submit-footer-modal").attr("value", "{% trans 'Reserve' %}");
             $("#artfolio_form").attr("action", "{% app_reverse 'picture_order' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}");
         }
     };
     $("input[type=radio]").click(function(){
         setButtonSubmitText();
     });
-    {% if picture.status == 'reserve' %}
-    $("input[value=reserve]").parent().remove();
+    {% if picture.status == 'sold_out' %}
+    $("input[value=sold_out]").parent().remove();
     {% endif %}
     {% if copy_view %}
     $("input[value=copy]").trigger("click");
     setButtonSubmitText();
     {% else %}
-    $("input[value=reserve]").trigger("click");
+    $("input[value=sold_out]").trigger("click");
     setButtonSubmitText();
     {% endif %}
 });

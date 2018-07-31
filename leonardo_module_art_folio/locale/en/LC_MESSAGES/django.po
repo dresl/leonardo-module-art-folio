@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-24 19:14+0200\n"
+"POT-Creation-Date: 2018-07-31 13:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:82 admin.py:91
+#: admin.py:92 admin.py:101
 msgid "Preview"
 msgstr ""
 
-#: admin.py:108
+#: admin.py:118
 #, python-format
 msgid "Edit this %s separately"
 msgstr ""
 
-#: admin.py:110
+#: admin.py:120
 msgid "(save and continue editing to create a link)"
 msgstr ""
 
-#: admin.py:111
+#: admin.py:121
 msgid "Edit link"
 msgstr ""
 
-#: forms.py:29 templates/leonardo_module_art_folio/fullscreen_pictures.html:229
+#: forms.py:29 templates/leonardo_module_art_folio/_orderimage_form.html:64
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:310
 msgid "Reserve"
 msgstr ""
 
 #: forms.py:30 models.py:11
-#: templates/leonardo_module_art_folio/fullscreen_pictures.html:231
-msgid "Make copy"
+#: templates/leonardo_module_art_folio/_orderimage_form.html:60
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:312
+msgid "Order copy"
 msgstr ""
 
 #: forms.py:39
@@ -51,16 +53,16 @@ msgstr ""
 msgid "Make sure you have correct e-mail format."
 msgstr ""
 
-#: forms.py:47 forms.py:51 models.py:66 models.py:116 models.py:165
-#: models.py:214 models.py:388 models.py:406
+#: forms.py:47 forms.py:51 models.py:71 models.py:121 models.py:170
+#: models.py:219 models.py:393 models.py:411 models.py:493
 msgid "Name"
 msgstr ""
 
-#: forms.py:55 forms.py:59 models.py:408
+#: forms.py:55 forms.py:59 models.py:413
 msgid "Telephone"
 msgstr ""
 
-#: forms.py:68 models.py:412
+#: forms.py:68 models.py:417
 msgid "Note"
 msgstr ""
 
@@ -72,152 +74,178 @@ msgstr ""
 msgid "I want to"
 msgstr ""
 
-#: models.py:9 templates/leonardo_module_art_folio/_orderimage_form.html:43
-#: templates/leonardo_module_art_folio/fullscreen_pictures.html:224 views.py:32
+#: models.py:9 models.py:15
+#: templates/leonardo_module_art_folio/_orderimage_form.html:43
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:305 views.py:32
 msgid "Available"
 msgstr ""
 
 #: models.py:10 views.py:33
-msgid "Reserved"
+msgid "Not for sale / Sold out"
 msgstr ""
 
-#: models.py:16 models.py:79 models.py:128 models.py:177 models.py:226
-#: models.py:275 models.py:340
+#: models.py:16
+msgid "Sold out"
+msgstr ""
+
+#: models.py:21 models.py:84 models.py:133 models.py:182 models.py:231
+#: models.py:280 models.py:345 models.py:445
 msgid "Ordering"
 msgstr ""
 
-#: models.py:55 models.py:324
+#: models.py:60 models.py:329 models.py:435
 msgid "Project"
 msgstr ""
 
-#: models.py:56
+#: models.py:61
 msgid "Projects"
 msgstr ""
 
-#: models.py:67 models.py:389
+#: models.py:72 models.py:394 models.py:494
 msgid "Slug"
 msgstr ""
 
-#: models.py:68 models.py:391
+#: models.py:73 models.py:396 models.py:496
 msgid "Description"
 msgstr ""
 
-#: models.py:71 models.py:119 models.py:168 models.py:217 models.py:266
-#: models.py:315 models.py:394
+#: models.py:76 models.py:124 models.py:173 models.py:222 models.py:271
+#: models.py:320 models.py:399 models.py:499
 msgid "Translation"
 msgstr ""
 
-#: models.py:72 models.py:120 models.py:169 models.py:218 models.py:267
-#: models.py:316 models.py:395
+#: models.py:77 models.py:125 models.py:174 models.py:223 models.py:272
+#: models.py:321 models.py:400 models.py:500
 msgid "Translations"
 msgstr ""
 
-#: models.py:105
+#: models.py:110
 msgid "Image category"
 msgstr ""
 
-#: models.py:106
+#: models.py:111
 msgid "Image categories"
 msgstr ""
 
-#: models.py:154
+#: models.py:159
 msgid "Image theme"
 msgstr ""
 
-#: models.py:155
+#: models.py:160
 msgid "Image themes"
 msgstr ""
 
-#: models.py:203
+#: models.py:208
 msgid "Image color"
 msgstr ""
 
-#: models.py:204
+#: models.py:209
 msgid "Image colors"
 msgstr ""
 
-#: models.py:252
+#: models.py:257
 msgid "Image format"
 msgstr ""
 
-#: models.py:253
+#: models.py:258
 msgid "Image formats"
 msgstr ""
 
-#: models.py:263 models.py:312
+#: models.py:268 models.py:317
 msgid "Name (eg. 120x120cm)"
 msgstr ""
 
-#: models.py:301
+#: models.py:306
 msgid "Image technique"
 msgstr ""
 
-#: models.py:302
+#: models.py:307
 msgid "Image techniques"
 msgstr ""
 
-#: models.py:326 models.py:356
+#: models.py:331 models.py:361
 msgid "Project Image"
 msgstr ""
 
-#: models.py:329
+#: models.py:334 models.py:442
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:327
 msgid "Categories"
 msgstr ""
 
-#: models.py:331
+#: models.py:336
 msgid "Theme"
 msgstr ""
 
-#: models.py:333
+#: models.py:338
 msgid "Colors"
 msgstr ""
 
-#: models.py:335 templates/leonardo_module_art_folio/_orderimage_form.html:41
+#: models.py:340 templates/leonardo_module_art_folio/_orderimage_form.html:41
 msgid "Format"
 msgstr ""
 
-#: models.py:337
+#: models.py:342
 msgid "Technique"
 msgstr ""
 
-#: models.py:342
+#: models.py:347 models.py:447
 msgid "Featured Image"
 msgstr ""
 
-#: models.py:348
+#: models.py:353 models.py:453
 msgid "Published on"
 msgstr ""
 
-#: models.py:351
+#: models.py:356 models.py:456
 msgid "Will be filled in automatically when picture gets published."
 msgstr ""
 
-#: models.py:357
+#: models.py:362
 msgid "Project Images"
 msgstr ""
 
-#: models.py:403
+#: models.py:408
 msgid "Picture"
 msgstr ""
 
-#: models.py:410
+#: models.py:415
 msgid "E-mail"
 msgstr ""
 
-#: models.py:414
+#: models.py:421
 msgid "Order date"
 msgstr ""
 
-#: models.py:421
+#: models.py:428
 msgid "Picture Order"
 msgstr ""
 
-#: models.py:422
+#: models.py:429
 msgid "Picture Orders"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/fullscreen_pictures.html:246
-msgid "Number of searched pictures"
+#: models.py:437
+msgid "Product Image"
+msgstr ""
+
+#: models.py:440
+msgid "Number of products"
+msgstr ""
+
+#: models.py:461
+msgid "Other product"
+msgstr ""
+
+#: models.py:462
+msgid "Other products"
+msgstr ""
+
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:327
+msgid "Displayed"
+msgstr ""
+
+#: templates/leonardo_module_art_folio/fullscreen_pictures.html:382
+msgid "Close"
 msgstr ""
 
 #: templates/leonardo_module_art_folio/orderimage_form.html:4
@@ -225,24 +253,29 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/search_form.html:13
+#: templates/leonardo_module_art_folio/search_form.html:12
 msgid "Choose category"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/search_form.html:18
+#: templates/leonardo_module_art_folio/search_form.html:17
 msgid "Choose theme"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/search_form.html:23
+#: templates/leonardo_module_art_folio/search_form.html:22
 msgid "Choose color"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/search_form.html:28
+#: templates/leonardo_module_art_folio/search_form.html:27
 msgid "Choose format"
 msgstr ""
 
-#: templates/leonardo_module_art_folio/search_form.html:33
+#: templates/leonardo_module_art_folio/search_form.html:32
 msgid "Availability"
+msgstr ""
+
+#: views.py:123
+#, python-format
+msgid "%s of %s"
 msgstr ""
 
 #: widget/artfolio/models.py:45
