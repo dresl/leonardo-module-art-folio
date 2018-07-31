@@ -229,6 +229,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
 #pictureFullscreen .modal-body .image-portrait {
     margin: 0 auto;
     display: block;
+    width: auto;
 }
 #pictureFullscreen .close {
     margin-top: 10px;
@@ -298,7 +299,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
         <div class="col-xs-12 padding-none main-images-preview">
 
             {% for picture in picture_list %}
-            <div class="object-image" data-slick-index="{{ forloop.counter0 }}">
+            <div class="object-image" data-picture-id="{{ picture.id }}"" data-slick-index="{{ forloop.counter0 }}">
                 {% thumbnail picture.image "1920x1080" format="PNG" as image %}
                 <img class="project-image image-{{ picture.id }}" data-lazy="{{ image.url }}" />
                 {% endthumbnail %}
@@ -433,7 +434,8 @@ $(function(){
     // go to proper slide
     if (window.location.hash.replace("#/","").indexOf("slick-slide-") >= 0 ) {
         var ID = window.location.hash.replace("#/slick-slide-","");
-        $('.main-images-preview').slick("slickGoTo", ID);
+        var index = $(".slick-slide[data-picture-id='" + ID + "']").attr("data-slick-index");
+        $('.main-images-preview').slick("slickGoTo", index);
     }
 
     // left info panel functions
@@ -488,7 +490,7 @@ $(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
         setTimeout(function(){
-            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("data-slick-index");
+            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("data-picture-id");
             fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
             addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
         }, 300);
