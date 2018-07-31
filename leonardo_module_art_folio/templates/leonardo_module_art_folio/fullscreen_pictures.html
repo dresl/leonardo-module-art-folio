@@ -3,8 +3,8 @@
 
 <style type="text/css">
 .project-image {
-  margin: 0px;
-  width: 100%;
+    margin: 0px;
+    width: 100%;
 }
 .project-image.image-portrait {
     height: 100vh;
@@ -180,9 +180,11 @@ ul.categories-menu.similar-images-preview.slick-slider {
     padding-bottom: 15px;
 }
 .categories .top-panel .close {
-    float: right;
     font-size: 22px;
     padding-top: 5px;
+    position: absolute;
+    right: 15px;
+    z-index: 50;
 }
 .categories .top-panel .btn-search {
     display: inline-block;
@@ -282,21 +284,24 @@ ul.categories-menu.similar-images-preview.slick-slider {
 .object-detail.categories-opened.search-tab-opened .btn-fullscreen {
     bottom: 298px;
 }
+.object-image.slick-slide.is-active {
+    box-shadow: 1px 4px 20px 10px #a7a7a7;
+}
 </style>
 
-<div class="object-detail more-info-opened categories-opened" slick-active-id="">
+<div class="object-detail more-info-opened categories-opened" slick-active-index="">
     <div class="row">
         <!-- <h1>{{ object.translation.title }}</h1> -->
         <div class="col-xs-12 padding-none main-images-preview">
 
             {% for picture in picture_list %}
-            <div class="object-image" slick-info-id="info-slick-{{ picture.id }}">
+            <div class="object-image" data-slick-index="{{ forloop.counter0 }}">
                 {% thumbnail picture.image "1920x1080" format="PNG" as image %}
                 <img class="project-image image-{{ picture.id }}" data-lazy="{{ image.url }}" />
                 {% endthumbnail %}
                 <script type="text/javascript">
                 $(function(){
-                    $("<div class='info-object info-slick' slick-info-id='info-slick-{{ picture.id }}'>\
+                    $("<div class='info-object info-slick' data-slick-index='{{ forloop.counter0 }}'>\
                     <h2>{{ picture.translation.name }}</h2>\
                     <span>{% for format in picture.image_format.all %}{{ format.translation.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>\
                     {{ picture.translation.description|escapejs|safe }}\
@@ -312,7 +317,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
                     <a class='ajax-modal btn btn-order btn-block' href='{% app_reverse 'picture_copy' 'leonardo_module_art_folio.apps.projects' pk=picture.id %}'>{% trans 'Order copy' %}</a>\
                     </div>\
                     </div>").appendTo($(".panel-more-info"));
-                    $("<span class='btn-title' slick-info-id='info-slick-{{ picture.id }}'>{{ picture.translation.name }}</span>").appendTo($(".btn-open-panel"));
+                    $("<span class='btn-title' data-slick-index='{{ forloop.counter0 }}'>{{ picture.translation.name }}</span>").appendTo($(".btn-open-panel"));
                 });
                 </script>
             </div>
@@ -420,25 +425,24 @@ $(function(){
     });
 
     // fix slick id
-    $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+    $(".main-content").attr("slick-active-index", $(".slick-current.slick-active").attr("data-slick-index"));
     
     // go to proper slide
     if (window.location.hash.replace("#/","").indexOf("slick-slide-") >= 0 ) {
         var ID = window.location.hash.replace("#/slick-slide-","");
-        var slideIndex = $(".object-image[slick-info-id*='info-slick-" + ID + "']").attr("data-slick-index");
-        $('.main-images-preview').slick("slickGoTo", slideIndex, "true");
+        $('.main-images-preview').slick("slickGoTo", ID);
     }
 
     // left info panel functions
     function compareInfoContentSlickActive(element) {
-        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+        if ($(element).attr("data-slick-index") == $(".main-content").attr("slick-active-index")) {
             $(element).animate({opacity:1},300).show();
         } else {
             $(element).animate({opacity:0},300).hide();
         }
     }
     function compareBtnOpenInfoSlickActive(element) {
-        if ($(element).attr("slick-info-id") == $(".slick-current.slick-active").attr("slick-info-id")) {
+        if ($(element).attr("data-slick-index") == $(".slick-current.slick-active").attr("data-slick-index")) {
             $(element).css("right", "0px").css("display", "block");
         } else {
             $(element).css("right", "-42px").css("display", "none");
@@ -449,6 +453,8 @@ $(function(){
         $(element).map(function(){
             if (($(this).width() - $(this).height()) <= 200) {
                 $(this).addClass("image-portrait");
+            } else {
+                $(this).addClass("normal");
             }
         });
     }
@@ -465,13 +471,13 @@ $(function(){
         compareBtnOpenInfoSlickActive($(this));
     });
     setTimeout(function(){
-        fixPortraitPicture($(".slick-current.slick-active .project-image"));
-        addImageToModal($(".slick-current.slick-active .project-image"));
-    }, 500);
+        fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
+        addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
+    }, 300);
     
     // info inner content, btn afterChange and portrait picture
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
-        $(".main-content").attr("slick-active-id", $(".slick-current.slick-active").attr("slick-info-id"));
+        $(".main-content").attr("slick-active-index", $(".slick-current.slick-active").attr("data-slick-index"));
         $(".info-object.info-slick").map(function(){
             compareInfoContentSlickActive($(this));
         });
@@ -479,12 +485,43 @@ $(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
         setTimeout(function(){
-            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("slick-info-id").replace("info-slick-","");
-            fixPortraitPicture($(".slick-current.slick-active .project-image"));
-            addImageToModal($(".slick-current.slick-active .project-image"));
-        }, 250);
+            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("data-slick-index");
+            fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
+            addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
+        }, 300);
     });
 
+    // auto hide panels
+    function hideInfoPanel() {
+        infoTimeOut = setTimeout(function(){
+            $(".object-detail").removeClass("more-info-opened");
+        }, 4000);
+    }
+    function hideCategoriesPanel() {
+        categoriesTimeOut = setTimeout(function(){
+            $(".object-detail").removeClass("categories-opened");
+        }, 4000);
+    }
+    // info actions
+    hideInfoPanel()
+    $(".panel-more-info").mouseout(function(){
+        hideInfoPanel();
+    });
+    $(".panel-more-info").mouseover(function(){
+        setTimeout(function(){
+            clearTimeout(infoTimeOut);
+        });
+    });
+    // categories actions
+    hideCategoriesPanel()
+    $(".categories").mouseout(function(){
+        hideCategoriesPanel();
+    });
+    $(".categories").mouseover(function(){
+        setTimeout(function(){
+            clearTimeout(categoriesTimeOut);
+        });
+    });
 });
 </script>
 
@@ -493,13 +530,14 @@ $(function(){
 $(function(){
     $('.similar-images-preview')
     .on('init', function(event, slick) {
-        $('.similar-images-preview .slick-slide.slick-current').addClass('is-active');
+        $(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index")).addClass('is-active');
     })
     .slick({
         swipeToSlide: true,
         slidesToShow: 10,
         slidesToScroll: 3,
         dots: false,
+        centerMode: true,
         focusOnSelect: false,
         infinite: false,
         lazyLoad: 'ondemand',
@@ -525,12 +563,11 @@ $(function(){
     });
     /* sync sliders */
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide) {
-        $('.similar-images-preview').slick('slickGoTo', currentSlide);
+        $('.similar-images-preview').slick('slickGoTo', $(".main-content").attr("slick-active-index"));
         var currrentNavSlideElem = '.similar-images-preview .slick-slide[data-slick-index="' + currentSlide + '"]';
         $('.similar-images-preview .slick-slide.is-active').removeClass('is-active');
         $(currrentNavSlideElem).addClass('is-active');
     });
-
     $('.similar-images-preview').on('click', '.slick-slide', function(event) {
         event.preventDefault();
         var goToSingleSlide = $(this).data('slick-index');
