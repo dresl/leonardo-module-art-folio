@@ -112,6 +112,7 @@ class ProjectImageOrderForm(SelfHandlingForm):
                 'domain': request.site.domain,
             },
             [email.strip() for email in settings.ORDER_DEFAULT_TO_EMAIL.split(',')],
+            settings.DEFAULT_FROM_EMAIL,
             fail_silently=False,
         )
         # send confirmation

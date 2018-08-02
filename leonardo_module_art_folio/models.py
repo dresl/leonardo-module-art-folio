@@ -8,12 +8,16 @@ from django.core.urlresolvers import reverse
 CHOICES_IMAGE_STATUS = (
     ('available', _('Available')),
     ('sold_out', _('Not for sale / Sold out')),
-    ('copy', _('Order copy')),
 )
 
 CHOICES_PRODUCT_STATUS = (
     ('available', _('Available')),
     ('sold_out', _('Sold out')),
+)
+
+CHOICES_ORDER_STATUS = (
+    ('sold_out', _('Reserve')),
+    ('copy', _('Order copy')),
 )
 
 class Project(models.Model, TranslatedObjectMixin):
@@ -416,7 +420,7 @@ class ProjectImageOrder(models.Model):
     note = models.TextField(
         verbose_name=_("Note"), default='', blank=True)
     status = models.CharField(
-        verbose_name="Status", max_length=100, choices=CHOICES_IMAGE_STATUS, default='available')
+        verbose_name="Status", max_length=100, choices=CHOICES_ORDER_STATUS, default='available')
 
     pub_date = models.DateTimeField(_('Order date'), auto_now_add=True)
 
