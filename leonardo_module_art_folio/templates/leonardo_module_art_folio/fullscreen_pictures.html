@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n watermark %}
 {% load leonardo_tags leonardo_page_tags thumbnail %}
 
 <style type="text/css">
@@ -301,7 +301,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
             {% for picture in picture_list %}
             <div class="object-image" data-picture-id="{{ picture.id }}"" data-slick-index="{{ forloop.counter0 }}">
                 {% thumbnail picture.image "1920x1080" format="PNG" as image %}
-                <img class="project-image image-{{ picture.id }}" src="" data-lazy="{{ image.url }}" />
+                <img class="project-image image-{{ picture.id }}" src="" data-lazy="{{ image.url|watermark:"obraz,position=br,opacity=60,quality=1" }}" />
                 {% endthumbnail %}
                 <script type="text/javascript">
                 $(function(){
