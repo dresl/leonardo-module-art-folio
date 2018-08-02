@@ -301,7 +301,7 @@ ul.categories-menu.similar-images-preview.slick-slider {
             {% for picture in picture_list %}
             <div class="object-image" data-picture-id="{{ picture.id }}"" data-slick-index="{{ forloop.counter0 }}">
                 {% thumbnail picture.image "1920x1080" format="PNG" as image %}
-                <img class="project-image image-{{ picture.id }}" picture-id="{{ picture.id }}" data-lazy="{{ image.url }}" />
+                <img class="project-image image-{{ picture.id }}" src="" data-lazy="{{ image.url }}" />
                 {% endthumbnail %}
                 <script type="text/javascript">
                 $(function(){
@@ -467,7 +467,7 @@ $(function(){
     function addImageToModal(element) {
         ModalImageInterval = setInterval(function(){
             $("#pictureFullscreen .modal-body").html(element.clone());
-            if ($("#pictureFullscreen .modal-body img").hasClass("image-" + $(element).attr("picture-id"))) {
+            if ($("#pictureFullscreen .modal-body img").attr("src") != "") {
                 clearInterval(ModalImageInterval);
             }
         }, 250);
