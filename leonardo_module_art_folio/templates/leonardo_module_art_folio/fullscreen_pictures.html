@@ -6,6 +6,7 @@
     margin: 0px;
     width: 100%;
 }
+
 .project-image.image-portrait {
     height: 100vh;
     width: auto;
@@ -21,6 +22,14 @@
 .bold {
     font-weight: bold;
 }
+
+/* ajax loader */
+.slick-slide {
+    background-image: url(/static/css/ajax-loader.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .object-text {
     text-align: center;
 }
@@ -458,8 +467,6 @@ $(function(){
         $(element).map(function(){
             if (($(this).width() - $(this).height()) <= 200) {
                 $(this).addClass("image-portrait");
-            } else {
-                $(this).addClass("normal");
             }
         });
     }
@@ -480,10 +487,13 @@ $(function(){
     $(".btn-open-panel .btn-title").map(function(){
         compareBtnOpenInfoSlickActive($(this));
     });
-    setTimeout(function(){
+    loadFixes = setInterval(function(){
         fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
         addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
-    }, 300);
+        if ($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image").hasClass("image-portrait")) {
+            clearInterval(loadFixes);
+        }
+    }, 250);
     
     // info inner content, btn afterChange and portrait picture
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
@@ -494,11 +504,13 @@ $(function(){
         $(".btn-open-panel .btn-title").map(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
-        setTimeout(function(){
-            window.location.hash = "#/slick-slide-" +  $(".slick-current").attr("data-picture-id");
+        loadFixesAfterChange = setInterval(function(){
             fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
             addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
-        }, 300);
+            if ($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image").hasClass("image-portrait")) {
+                clearInterval(loadFixesAfterChange);
+            }
+        }, 250);
     });
 
     // auto hide panels
