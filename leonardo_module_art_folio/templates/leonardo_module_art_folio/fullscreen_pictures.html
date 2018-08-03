@@ -24,7 +24,7 @@
 }
 
 /* ajax loader */
-.slick-list {
+#main-images-preview .slick-list {
     background-image: url(/static/css/ajax-loader.gif);
     background-repeat: no-repeat;
     background-position: 50% 40%;
@@ -479,6 +479,10 @@ $(function(){
             }
         }, 250);
     }
+    // set id
+    function setImageIdToUrl() {
+        window.location.hash = "slick-slide-"+$(".slick-current.slick-active").attr("data-picture-id");
+    }
 
     // info inner content, btn onload and portrait picture
     $(".info-object.info-slick").map(function(){
@@ -489,11 +493,12 @@ $(function(){
     });
     loadFixes = setInterval(function(){
         fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
-        addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
         if ($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image").hasClass("image-portrait")) {
             clearInterval(loadFixes);
         }
     }, 250);
+    addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
+    setImageIdToUrl();
     
     // info inner content, btn afterChange and portrait picture
     $('.main-images-preview').on('afterChange', function(event, slick, currentSlide, direction){
@@ -504,13 +509,14 @@ $(function(){
         $(".btn-open-panel .btn-title").map(function(){
             compareBtnOpenInfoSlickActive($(this));
         });
+        setImageIdToUrl();
         loadFixesAfterChange = setInterval(function(){
             fixPortraitPicture($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
-            addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
             if ($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image").hasClass("image-portrait")) {
                 clearInterval(loadFixesAfterChange);
             }
         }, 250);
+        addImageToModal($(".slick-slide[data-slick-index='" + $(".main-content").attr("slick-active-index") + "'] .project-image"));
     });
 
     // auto hide panels
